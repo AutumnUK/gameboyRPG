@@ -1,4 +1,4 @@
 #!/bin/bash
 
-GBDK/bin/lcc -o game.gb main.c
-sameboy game.gb
+Tools/GBDK/bin/lcc -o Build/game.gb src/main.c
+sameboy Build/game.gb
