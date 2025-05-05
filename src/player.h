@@ -10,9 +10,9 @@ typedef struct {
     uint8_t move_progress;      
 
 } Player;
-void handlePlayerInput(Player* player);
-void updatePlayerPosition(Player* player) ;
-void movePlayerSprites(Player* player);
-void playerSpawn(Player* player, int x, int y);
+void    handlePlayerInput(Player* player);
+void    updatePlayerPosition(Player* player) ;
+void    movePlayerSprites(Player* player);
+void    playerSpawn(Player* player, int x, int y);
 uint8_t getTileAt(uint8_t x, uint8_t y);
 #endif
