@@ -1,15 +1,8 @@
 #include "gbdk_headers.h"
-
 #include "../res/save_room_map.c"
 #include "../res/save_room_tiles.c"
-
 #include "player.h"
 
-// TODO
-// Add collision
-// Add interaction (PC with menu)
-// Add pause menu?
-// More later
 void saveRoom(void) {
     Player player;
     playerSpawn(&player, 40, 80);
