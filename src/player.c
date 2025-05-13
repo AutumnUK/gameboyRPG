@@ -12,6 +12,9 @@ void playerSpawn(Player* player, int x, int y) {
     player -> is_moving     = 0;
     player -> direction     = 0;
     player -> move_progress = 0;
+    player -> player_hp     = 20;
+    player -> player_speed  = 5;
+    player -> player_atk    = 4;
 
     set_sprite_data(0, 4, GoofyGuy);  // Load sprite tile data
     set_sprite_tile(0, 0);
@@ -26,8 +29,6 @@ uint8_t getTileAt(uint8_t x, uint8_t y) {
     gprintf("%d", SaveRoomMap[tileIndex]);
     return 1;
 }
-
-
 
 // Handle input for movement
 void handlePlayerInput(Player* player) {

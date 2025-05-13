@@ -8,6 +8,9 @@ typedef struct {
     uint8_t direction;         
     uint8_t is_moving;          
     uint8_t move_progress;      
+    uint16_t player_hp;
+    uint8_t player_speed;
+    uint8_t player_atk;
 
 } Player;
 void    handlePlayerInput(Player* player);
