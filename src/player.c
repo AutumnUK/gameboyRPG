@@ -1,7 +1,7 @@
 #include    "gbdk_headers.h"
 #include    "player.h"
 #include    "../res/goofy_guy.c"
-#include    "../res/save_room_map.h"
+
 
 #define     TILE_FLOOR      0x0C // Floor tile.
 #define     MOVE_DISTANCE   16
@@ -22,14 +22,14 @@ void playerSpawn(Player* player, int x, int y) {
     set_sprite_tile(2, 2);
     set_sprite_tile(3, 3);
 }
-
+/*
 uint8_t getTileAt(uint8_t x, uint8_t y) {
     uint16_t tileIndex = ( y / 8 ) * 20 + ( x / 8);
     gotogxy(0,0);
     gprintf("%d", SaveRoomMap[tileIndex]);
     return 1;
 }
-
+*/
 // Handle input for movement
 void handlePlayerInput(Player* player) {
     if (player->is_moving == 0) {
@@ -56,7 +56,7 @@ void updatePlayerPosition(Player* player) {
         if (player->move_progress == MOVE_DISTANCE) {
             player->move_progress = 0;
             player->is_moving = 0;
-            getTileAt(player->x,player->y);
+            //getTileAt(player->x,player->y);
         }
     }
 }
