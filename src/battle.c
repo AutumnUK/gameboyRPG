@@ -22,20 +22,44 @@ void battle( Player* player ) {
     while (state == 1 ) { // Player Turn
         battleWindowUpdate( player -> player_hp , enemy_hp );
                 
-        gotogxy(  1 , 16 );     gprintf( "Attack" );    gotogxy( 11 , 16 );     gprintf( "Item" );
-        gotogxy(  1 , 17 );     gprintf( "Special" );   gotogxy( 11 , 17 );     gprintf( "Escape" );
-                
+        gotogxy(  1 , 16 );     
+        gprintf( "Attack" ); 
 
+        gotogxy( 11 , 16 );     
+        gprintf( "Item" );
+
+        gotogxy(  1 , 17 );    
+        gprintf( "Special" );
+
+        gotogxy( 11 , 17 );   
+        gprintf( "Escape" );
+                
         switch ( selection ) {
             case 1: // Attack
-                gotogxy(  0 , 16 ); gprintf( ">" ); gotogxy( 10 , 16 ); gprintf( " " );
-                gotogxy(  0 , 17 ); gprintf( " " ); gotogxy( 10 , 17 ); gprintf( " " );
+                gotogxy(  0 , 16 ); 
+                gprintf( ">" ); 
+
+                gotogxy( 10 , 16 ); 
+                gprintf( " " );
+                
+                gotogxy(  0 , 17 ); 
+                gprintf( " " ); 
+
+                gotogxy( 10 , 17 ); 
+                gprintf( " " );
                             
-                if (joypad() & J_RIGHT  ) { selection = 2; }
-                if (joypad() & J_DOWN   ) { selection = 3; }     
+                if (joypad() & J_RIGHT  ) { 
+                    selection = 2; 
+                }
+
+                if (joypad() & J_DOWN   ) { 
+                    selection = 3; 
+                }     
                             
                 if ( joypad() & J_A ) {
-                    writeText("ATTACK" , " " , " ");
+                    
+                    writeText("YOU ATTACKED" , "ENEMY TAKES DAMAGE" , "KEEP IT UP");
+                    delay(200);
                     enemy_hp -= ( player -> player_atk );
                     battleWindowUpdate( player -> player_hp , enemy_hp );
                     if ( enemy_hp > 0 ) { state = 2; }
@@ -44,43 +68,96 @@ void battle( Player* player ) {
                 break;
             
             case 2: // Item
-                gotogxy(  0 , 16 ); gprintf( " " ); gotogxy( 10 , 16 ); gprintf( ">" );
-                gotogxy(  0 , 17 ); gprintf( " " ); gotogxy( 10 , 17 ); gprintf( " " );
-                if ( joypad() & J_LEFT  ) { selection = 1; }
-                if ( joypad() & J_DOWN  ) { selection = 4; }
+                gotogxy(  0 , 16 ); 
+                gprintf( " " ); 
+
+                gotogxy( 10 , 16 ); 
+                gprintf( ">" );
+               
+                gotogxy(  0 , 17 ); 
+                gprintf( " " ); 
+
+                gotogxy( 10 , 17 ); 
+                gprintf( " " );
+
+                if ( joypad() & J_LEFT  ) { 
+                    selection = 1; 
+                }
+
+                if ( joypad() & J_DOWN  ) { 
+                    selection = 4; 
+                }
+
                 break;
 
             case 3: // Special
-                if ( joypad() & J_UP    ) { selection = 1; }
-                if ( joypad() & J_RIGHT ) { selection = 4; }
-                gotogxy(  0 , 16 ); gprintf( " " ); gotogxy( 10 , 16 ); gprintf( " " );
-                gotogxy(  0 , 17 ); gprintf( ">" ); gotogxy( 10 , 17 ); gprintf( " " );
+                if ( joypad() & J_UP    ) { 
+                    selection = 1; 
+                }
+
+                if ( joypad() & J_RIGHT ) { 
+                    selection = 4; 
+                }
+
+                gotogxy(  0 , 16 ); 
+                gprintf( " " ); 
+
+                gotogxy( 10 , 16 ); 
+                gprintf( " " );
+                
+                gotogxy(  0 , 17 ); 
+                gprintf( ">" ); 
+
+                gotogxy( 10 , 17 ); 
+                gprintf( " " );
+                
                 break;
 
             case 4: // Escape
-                if ( joypad() & J_UP    ) { selection = 2; }
-                if ( joypad() & J_LEFT  ) { selection = 3; }
-                gotogxy(  0 , 16 ); gprintf( " " ); gotogxy( 10 , 16 ); gprintf( " " );
-                gotogxy(  0 , 17 ); gprintf( " " ); gotogxy( 10 , 17 ); gprintf( ">" );
+                if ( joypad() & J_UP    ) { 
+                    selection = 2; 
+                }
+
+                if ( joypad() & J_LEFT  ) { 
+                    selection = 3; 
+                }
+
+                gotogxy(  0 , 16 ); 
+                gprintf( " " ); 
+
+                gotogxy( 10 , 16 ); 
+                gprintf( " " );
+                
+                gotogxy(  0 , 17 ); 
+                gprintf( " " ); 
+
+                gotogxy( 10 , 17 ); 
+                gprintf( ">" );
+                
                 break;
             }
         
-                
+        // Enemy Turn
+        while ( state == 2 ) { 
+            writeText("ENEMY ATTACKS","2 DAMAGE"," ");  
+            player -> player_hp -= enemy_atk;
+            state = 1;
+        }
 
-    // Enemy Turn
-    while ( state == 2 ) { 
-        writeText("ENEMY ATTACKS","2 DAMAGE"," ");  
-        player -> player_hp -= enemy_atk;
-        state = 1;
-    }
-
-    // Win Battle
-    while ( state == 3 ) {
-        writeText("YOU DEFEATED CYBER","YOU GAIN 10XP"," ");
-        break;
-    }
+        // Win Battle
+        while ( state == 3 ) {
+            writeText("YOU DEFEATED CYBER","YOU GAIN 1XP"," ");
+            player -> xp += 1;
+            if ( ( player -> xp ) >= ( player -> xp_for_level ) ) {
+                player -> level += 1;
+                player -> xp = 0;
+                player -> xp_for_level += 5;
+                player -> player_atk += 1;
+            }
+            break;
+        }
 
         // Lose Battle
         // while ( state == 4 )            
-}
+    }
 }

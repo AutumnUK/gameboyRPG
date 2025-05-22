@@ -31,6 +31,7 @@ uint8_t writeText( char i[20] , char j[20] , char k[18] ) {
     while ( wait = 1 ) {
         delay(200);
         if ( joypad() & J_A ) {
+            delay(200);
             clearText();
             return 1;
         }

@@ -12,7 +12,11 @@ void playerSpawn(Player* player, int x, int y) {
     player -> is_moving     = 0;
     player -> direction     = 0;
     player -> move_progress = 0;
+    player -> level         = 1;
+    player -> xp            = 0;
+    player -> xp_for_level  = 20;
     player -> player_hp     = 20;
+    player -> player_max_hp = 20;
     player -> player_speed  = 5;
     player -> player_atk    = 1;
 

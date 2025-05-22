@@ -3,8 +3,9 @@
 #include "testament_lib.h"
 #include "battle.h"
 
-uint8_t states = 1;
-uint16_t battle_timer = 0;
+uint8_t     states          = 1;
+uint16_t    battle_timer    = 0;
+
 void saveRoom(void) {
     Player player;
     playerSpawn(&player, 40, 80);
@@ -18,10 +19,9 @@ void saveRoom(void) {
             battle_timer = 0;
         }
         
-
         handlePlayerInput(&player);
         updatePlayerPosition(&player);
         movePlayerSprites(&player);
 
     }
-}
+
