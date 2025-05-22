@@ -3,12 +3,10 @@
 #include "save_room.h"
 #include "player.h"
 
-
 void main(void) {    
     SHOW_SPRITES;
     SHOW_BKG;
     DISPLAY_ON;    
-    SHOW_WIN;
-    //titleScreen();
+    titleScreen();
     saveRoom();
 }
