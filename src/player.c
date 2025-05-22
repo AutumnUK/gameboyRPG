@@ -14,11 +14,11 @@ void playerSpawn(Player* player, int x, int y) {
     player -> move_progress = 0;
     player -> level         = 1;
     player -> xp            = 0;
-    player -> xp_for_level  = 20;
+    player -> xp_for_level  = 2;
     player -> player_hp     = 20;
     player -> player_max_hp = 20;
     player -> player_speed  = 5;
-    player -> player_atk    = 1;
+    player -> player_atk    = 5;
 
     set_sprite_data(0, 4, GoofyGuy);  // Load sprite tile data
     set_sprite_tile(0, 0);

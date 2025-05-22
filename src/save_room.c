@@ -23,7 +23,7 @@ void saveRoom(void) {
         }
 
         if ( joypad() & J_SELECT ) {
-            pause_menu();
+            pause_init(&player);
         }
 
         handlePlayerInput(&player);
