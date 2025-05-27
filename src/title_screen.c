@@ -1,4 +1,4 @@
-#include "gbdk_headers.h"
+#include "headers.h"
 
 // Map and Tile Data
 #include "../res/title_screen_map.c"

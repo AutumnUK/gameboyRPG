@@ -1,4 +1,4 @@
-#include    "gbdk_headers.h"
+#include "headers.h"
 
 #define     TOPROW      15
 #define     MIDROW      16
@@ -11,6 +11,10 @@ void clearText( void ) {
     for ( uint8_t i = 0; i < BOXLEN; i++ ) {
         gprintf( " " );
     }
+}
+
+void battleWindowUpdate( uint16_t hp ) {
+    gotogxy( 0 , 15 );  gprintf( "HP : %d" , hp );
 }
 
 // This function writes to the 3 rows on the bottom of the screen.
@@ -37,5 +41,7 @@ uint8_t writeText( char i[20] , char j[20] , char k[18] ) {
         }
     }
 }
+
+
 
 

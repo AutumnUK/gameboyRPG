@@ -1,4 +1,4 @@
-#include "gbdk_headers.h"
+#include "headers.h"
 #include "title_screen.h"
 #include "save_room.h"
 #include "player.h"

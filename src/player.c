@@ -1,4 +1,4 @@
-#include    "gbdk_headers.h"
+#include "headers.h"
 #include    "player.h"
 #include    "../res/goofy_guy.c"
 
@@ -18,7 +18,7 @@ void playerSpawn(Player* player, int x, int y) {
     player -> player_hp     = 20;
     player -> player_max_hp = 20;
     player -> player_speed  = 5;
-    player -> player_atk    = 5;
+    player -> player_atk    = 1;
 
     set_sprite_data(0, 4, GoofyGuy);  // Load sprite tile data
     set_sprite_tile(0, 0);

@@ -1,4 +1,4 @@
-#include "gbdk_headers.h"
+#include "headers.h"
 #include "player.h"
 
 

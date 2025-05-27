@@ -1,7 +1,6 @@
 #ifndef BATTLE_H
 #define BATTLE_H
-#include "player.h"
-void battleWindowUpdate( Player * player );
-void battle( Player * player );
+
+void battle( Player * player , Enemy * enemy);
 
 #endif // BATTLE_H
