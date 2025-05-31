@@ -1,8 +1,6 @@
 #include "headers.h"
 #include "player.h"
 
-
-
 void pause_exit( void ) {
     gotogxy( 0 , 0 );
     
@@ -27,27 +25,6 @@ void pause_menu( void ) {
 void pause_init( Player * player) {
     HIDE_SPRITES;
     
-    gotogxy( 0 , 0 );
-    
-    for (uint8_t i = 0 ; i < 20 ; i ++) { 
-        gprintf("~");    
-    }
-    
-    for (uint8_t i = 1; i < 17; i++ ){
-        gotogxy(0,i);
-        gprintf("[");
-
-        gotogxy(12,i);
-        gprintf("]");
-
-        gotogxy(19,i);
-        gprintf("#");
-    }       
-
-    for (uint8_t i = 0; i < 20; i++) {
-        gprintf("~"); 
-    }
-
     gotogxy( 14 , 1 );
     gprintf( "PAUSE" );
 
@@ -55,10 +32,20 @@ void pause_init( Player * player) {
     gprintf( "LEVEL : %d", player -> level );
 
     gotogxy( 1 , 2 );
-    gprintf( "XP %d / %d", player -> xp, player -> xp_for_level);
+    gprintf( "XP %d", player -> xp);
+    gprintf( " / %d", player -> xp_for_level);
 
     gotogxy( 1 , 4 );
     gprintf( "STATS" );
+
+    gotogxy( 1 , 5 );
+    gprintf( "Attack   %d", player -> player_atk);
+
+    gotogxy( 1 , 6 );
+    gprintf( "Defence  %d", player -> defence);
+
+    gotogxy( 1 , 7 );
+    gprintf( "Speed    %d", player -> player_speed);
 
     pause_menu();
 }

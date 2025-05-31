@@ -1,8 +1,6 @@
 #include    "headers.h"
 
-uint16_t    battle_timer    = 0;
-
-
+uint8_t     stepsNeeded     = 1;
 
 void saveRoom(void) {
 
@@ -23,11 +21,10 @@ void saveRoom(void) {
          
     while (state = 1) {   
         vsync();
-        battle_timer ++;
 
-        if ( battle_timer == 600 ) {            
+        if ( player.steps > stepsNeeded) {
             battle(&player , &slime);
-            battle_timer = 0;
+
         }
 
         if ( joypad() & J_SELECT ) {

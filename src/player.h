@@ -2,7 +2,6 @@
 #define PLAYER_H
 
 typedef struct {
-    // Movement Values
     uint8_t     x;             
     uint8_t     y;          
     uint8_t     direction;         
@@ -15,8 +14,11 @@ typedef struct {
     uint16_t    xp;
     uint16_t    xp_for_level;
     uint16_t    player_max_hp;
+    uint8_t     defence;
+    uint8_t     steps;
 
 } Player;
+
 void        handlePlayerInput(Player* player);
 void        updatePlayerPosition(Player* player) ;
 void        movePlayerSprites(Player* player);

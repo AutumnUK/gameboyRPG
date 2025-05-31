@@ -14,11 +14,13 @@ void playerSpawn(Player* player, int x, int y) {
     player -> move_progress = 0;
     player -> level         = 1;
     player -> xp            = 0;
-    player -> xp_for_level  = 2;
+    player -> xp_for_level  = 15;
     player -> player_hp     = 20;
     player -> player_max_hp = 20;
     player -> player_speed  = 5;
-    player -> player_atk    = 1;
+    player -> player_atk    = 3;
+    player -> defence       = 2;
+    player -> steps         = 0;
 
     set_sprite_data(0, 4, GoofyGuy);  // Load sprite tile data
     set_sprite_tile(0, 0);
@@ -60,6 +62,11 @@ void updatePlayerPosition(Player* player) {
         if (player->move_progress == MOVE_DISTANCE) {
             player->move_progress = 0;
             player->is_moving = 0;
+            player -> steps ++;
+            gotogxy( 1, 1);
+            gprintf( "  ");
+            gotogxy( 1, 1);
+            gprintf( "%d", player -> steps);
             //getTileAt(player->x,player->y);
         }
     }
@@ -74,3 +81,4 @@ void movePlayerSprites(Player* player) {
     move_sprite(3, player->x + 8, player->y + 8);
     
 }
+
