@@ -4,15 +4,7 @@ uint8_t     stepsNeeded     = 1;
 
 void saveRoom(void) {
 
-    Enemy slime = {
-        .name = "SLIME",
-        .hp = 5,
-        .max_hp = 5,
-        .speed = 2,
-        .attack = 2,
-        .defence = 2,
-        .xp = 2
-    };
+
     
     uint8_t     state           = 1;
 
@@ -23,6 +15,15 @@ void saveRoom(void) {
         vsync();
 
         if ( player.steps > stepsNeeded) {
+            Enemy slime = {
+                .name = "SLIME",
+                .hp = 5,
+                .max_hp = 5,
+                .speed = 2,
+                .attack = 2,
+                .defence = 2,
+                .xp = 2
+            };
             battle(&player , &slime);
 
         }
