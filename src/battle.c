@@ -108,6 +108,7 @@ void inputSelection( uint8_t select ) {
 }
 
 void battle( Player * player , Enemy * enemy) { 
+    HIDE_SPRITES;
     uint8_t     state       = 1;
     uint8_t     selection   = 1;
 

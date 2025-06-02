@@ -25,6 +25,7 @@ void saveRoom(void) {
                 .xp = 2
             };
             battle(&player , &slime);
+            SHOW_SPRITES;
 
         }
 
