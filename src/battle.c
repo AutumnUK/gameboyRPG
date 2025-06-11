@@ -15,6 +15,11 @@ uint8_t enemyAppears( char enemy_name[] ) {
     }
 }
 
+void drawEnemy( Enemy * enemy ) {
+    // do code lol
+}
+
+
 uint16_t enemyHit( char enemy_name[] , uint16_t enemyhp, uint8_t damage ) {
 
     clearText();

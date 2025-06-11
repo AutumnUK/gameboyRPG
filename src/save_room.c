@@ -2,7 +2,9 @@
 #include    "../res/save_room_map.c"
 #include    "../res/save_room_tiles.c"
 
-uint8_t     stepsNeeded     = 10;
+const   uint8_t stepsBase   = 10;
+uint8_t     stepsNeeded     = 1;
+uint8_t     rng             = 0;
 
 void drawRoom( void ) {
     set_bkg_data(96,80,SaveRoomTiles);
@@ -13,6 +15,7 @@ void drawRoom( void ) {
 void saveRoom(void) {
     gotogxy(0,0);
     gprintf(" ");
+    stepsNeeded = (stepsNeeded + stepsBase + rng);
 
     uint8_t     state           = 1;
     Player      player;
@@ -21,6 +24,8 @@ void saveRoom(void) {
          
     while (state = 1) {   
         vsync();
+        rng ++;
+        if (rng >= 9) { rng = 0; }
 
         if ( player.steps > stepsNeeded) {
 
@@ -49,3 +54,4 @@ void saveRoom(void) {
 
     }
 }
+ 
