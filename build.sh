@@ -16,7 +16,7 @@ rm      -rf Build/*
 # Compile build files.
 echo "Building game"
 echo ""
-Tools/GBDK/bin/lcc -o Build/game.gb src/*.c -Wall
+Tools/GBDK/bin/lcc -v -o Build/game.gb src/*.c -Wall
 
 
 # Run the game? (errors out if file didn't compile)

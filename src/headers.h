@@ -11,5 +11,8 @@
 #include    "battle.h"
 #include    "pause.h"
 
+#include    "../res/test_dungeon_map.c"
+#include    "../res/test_dungeon_tiles.c"
+
 
 #endif

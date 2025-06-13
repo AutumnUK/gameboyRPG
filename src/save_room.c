@@ -1,15 +1,15 @@
 #include    "headers.h"
-#include    "../res/save_room_map.c"
-#include    "../res/save_room_tiles.c"
+//#include    "../res/test_dungeon_map.h"
+#include    "../res/test_dungeon_tiles.h"
 
-const   uint8_t stepsBase   = 10;
-uint8_t     stepsNeeded     = 1;
-uint8_t     rng             = 0;
+
+const   uint8_t     stepsBase       = 10;
+        uint8_t     stepsNeeded     = 1;
+        uint8_t     rng             = 0;
 
 void drawRoom( void ) {
-    set_bkg_data(96,80,SaveRoomTiles);
-    set_bkg_tiles(0,0,20,18,SaveRoomMap);
-    //redo this tomorrow
+    set_bkg_data(96,80,TestDungeonTiles);
+    //set_bkg_tiles(0,0,20,18,TestDungeonMap);
 }
 
 void saveRoom(void) {
