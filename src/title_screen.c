@@ -1,8 +1,8 @@
 #include "headers.h"
 
 // Map and Tile Data
-#include "../res/title_screen_map.c"
-#include "../res/title_screen_tiles.c"
+#include "../res/maps/title_screen_map.c"
+#include "../res/maps/title_screen_tiles.c"
 
 void titleScreen(void) {
     set_bkg_data(0,80,TitleScreenTiles);      

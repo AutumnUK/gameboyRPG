@@ -4,15 +4,11 @@
 #include    "../Tools/GBDK/include/gb/gb.h"
 #include    "../Tools/GBDK/include/gb/drawing.h"
 #include    "player.h"
-#include    "typedefs.h"    // Where the enemy is located
+#include    "typedefs.h"        // Where the enemy is located
 #include    "title_screen.h"
 #include    "save_room.h"
 #include    "testament_lib.h"
 #include    "battle.h"
 #include    "pause.h"
-
-#include    "../res/test_dungeon_map.c"
-#include    "../res/test_dungeon_tiles.c"
-
 
 #endif

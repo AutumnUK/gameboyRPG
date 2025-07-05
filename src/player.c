@@ -1,6 +1,6 @@
 #include "headers.h"
 #include    "player.h"
-#include    "../res/goofy_guy.c"
+#include    "../res/gfx/goofy_guy.c"
 
 
 #define     TILE_FLOOR      0x0C // Floor tile.

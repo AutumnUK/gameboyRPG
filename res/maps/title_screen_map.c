@@ -18,9 +18,9 @@
 
 */
 
-#define TitleScreenMapWidth 20
-#define TitleScreenMapHeight 18
-#define TitleScreenMapBank 0
+#define TitleScreenMapWidth   20
+#define TitleScreenMapHeight  18
+#define TitleScreenMapBank    0
 
 unsigned char TitleScreenMap[] =
 {
