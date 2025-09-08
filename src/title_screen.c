@@ -7,5 +7,6 @@
 void titleScreen(void) {
     set_bkg_data(0,80,TitleScreenTiles);      
     set_bkg_tiles(0,0,20,18,TitleScreenMap);
+
     while(joypad() != J_START) { vsync(); }
 }
