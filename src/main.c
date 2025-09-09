@@ -52,6 +52,7 @@ void main(void) {
     int moving = 0;
     camera_x = 0;
     camera_y = 0;
+    vsync();
     while (1) {
         vsync();
         
@@ -67,14 +68,12 @@ void main(void) {
         if (moving == 0) {
             if (joypad() & J_LEFT) {
                 moving = 1;
-                for (int i = 0; i < 8; i++) { scroll_bkg(-1,0); }
                 camera_x -=1;
                 moving = 0;
             }           
 
            if (joypad() & J_RIGHT) {
                 moving = 1;
-                for (int i = 0; i < 8; i++) { scroll_bkg(1,0); }
                 camera_x +=1;
                 moving = 0;
 
@@ -82,14 +81,12 @@ void main(void) {
 
             if (joypad() & J_UP) {
                 moving = 1;
-                for (int i = 0; i < 8; i++) { scroll_bkg(0,-1); }
                 camera_y -=1;
                 moving = 0;
             }
 
             if (joypad() & J_DOWN) {
                 moving = 1;
-                for (int i = 0; i < 8; i++) { scroll_bkg(0,1); }
                 camera_y += 1;
                 moving = 0;
 
