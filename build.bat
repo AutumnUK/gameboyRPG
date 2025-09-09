@@ -1,27 +1,34 @@
 @echo off
 cls
-
-:: Colors (limited support in standard CMD, so using plain text here)
 echo ==============================
-echo  GAMEBOY COMPILE SCRIPT V1
+echo  GAMEBOY INCREMENTAL BUILD
 echo ==============================
 
-:: Remove old build files
-echo Checking for and removing old builds...
-IF EXIST Build (
-    rmdir /s /q Build
+:: Ensure build directory exists
+if not exist Build mkdir Build
+
+:: Compile changed files
+for %%F in (src\*.c) do (
+    if not exist Build\%%~nF.o (
+        echo Compiling %%F ...
+        Tools\gbdk_win\bin\lcc -c -o Build\%%~nF.o %%F -Wall
+    ) else (
+        for %%I in (%%F) do for %%J in (Build\%%~nF.o) do (
+            if %%~tI GTR %%~tJ (
+                echo Recompiling %%F ...
+                Tools\gbdk_win\bin\lcc -c -o Build\%%~nF.o %%F -Wall
+            )
+        )
+    )
 )
-mkdir Build
 
-:: Compile build files
-echo.
-echo Building game...
-Tools\gbdk_win\bin\lcc -o Build\game.gb src\*.c -Wall
+:: Link step
+echo Linking game.gb ...
+Tools\gbdk_win\bin\lcc -o Build\game.gb Build\*.o
 
-:: Check if build succeeded
+:: Result
 if exist Build\game.gb (
-    echo.
     echo Build complete.
 ) else (
-    echo Game failed to compile.
+    echo Build failed.
 )

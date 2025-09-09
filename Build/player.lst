@@ -1,0 +1,598 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.4.1 #14650 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module player
+                                      6 	.optsdcc -msm83
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _gotogxy
+                                     12 	.globl _gprintf
+                                     13 	.globl _set_sprite_data
+                                     14 	.globl _joypad
+                                     15 	.globl _GoofyGuy
+                                     16 	.globl _playerSpawn
+                                     17 	.globl _handlePlayerInput
+                                     18 	.globl _updatePlayerPosition
+                                     19 	.globl _movePlayerSprites
+                                     20 ;--------------------------------------------------------
+                                     21 ; special function registers
+                                     22 ;--------------------------------------------------------
+                                     23 ;--------------------------------------------------------
+                                     24 ; ram data
+                                     25 ;--------------------------------------------------------
+                                     26 	.area _DATA
+                                     27 ;--------------------------------------------------------
+                                     28 ; ram data
+                                     29 ;--------------------------------------------------------
+                                     30 	.area _INITIALIZED
+    00000000                         31 _GoofyGuy::
+    00000000                         32 	.ds 64
+                                     33 ;--------------------------------------------------------
+                                     34 ; absolute external ram data
+                                     35 ;--------------------------------------------------------
+                                     36 	.area _DABS (ABS)
+                                     37 ;--------------------------------------------------------
+                                     38 ; global & static initialisations
+                                     39 ;--------------------------------------------------------
+                                     40 	.area _HOME
+                                     41 	.area _GSINIT
+                                     42 	.area _GSFINAL
+                                     43 	.area _GSINIT
+                                     44 ;--------------------------------------------------------
+                                     45 ; Home
+                                     46 ;--------------------------------------------------------
+                                     47 	.area _HOME
+                                     48 	.area _HOME
+                                     49 ;--------------------------------------------------------
+                                     50 ; code
+                                     51 ;--------------------------------------------------------
+                                     52 	.area _CODE
+                                     53 ;src\player.c:9: void playerSpawn(Player* player, int x, int y) {
+                                     54 ;	---------------------------------
+                                     55 ; Function playerSpawn
+                                     56 ; ---------------------------------
+    00000000                         57 _playerSpawn::
+    00000000 79               [ 4]   58 	ld	a, c
+                                     59 ;src\player.c:10: player -> x             = x;
+    00000001 12               [ 8]   60 	ld	(de), a
+                                     61 ;src\player.c:11: player -> y             = y;
+    00000002 4B               [ 4]   62 	ld	c, e
+    00000003 42               [ 4]   63 	ld	b, d
+    00000004 03               [ 8]   64 	inc	bc
+    00000005 F8 02            [12]   65 	ldhl	sp,	#2
+    00000007 7E               [ 8]   66 	ld	a, (hl)
+    00000008 02               [ 8]   67 	ld	(bc), a
+                                     68 ;src\player.c:12: player -> is_moving     = 0;
+    00000009 6B               [ 4]   69 	ld	l, e
+                                     70 ;	spillPairReg hl
+                                     71 ;	spillPairReg hl
+    0000000A 62               [ 4]   72 	ld	h, d
+                                     73 ;	spillPairReg hl
+                                     74 ;	spillPairReg hl
+    0000000B 23               [ 8]   75 	inc	hl
+    0000000C 23               [ 8]   76 	inc	hl
+    0000000D 23               [ 8]   77 	inc	hl
+    0000000E 36 00            [12]   78 	ld	(hl), #0x00
+                                     79 ;src\player.c:13: player -> direction     = 0;
+    00000010 6B               [ 4]   80 	ld	l, e
+                                     81 ;	spillPairReg hl
+                                     82 ;	spillPairReg hl
+    00000011 62               [ 4]   83 	ld	h, d
+                                     84 ;	spillPairReg hl
+                                     85 ;	spillPairReg hl
+    00000012 23               [ 8]   86 	inc	hl
+    00000013 23               [ 8]   87 	inc	hl
+    00000014 36 00            [12]   88 	ld	(hl), #0x00
+                                     89 ;src\player.c:14: player -> move_progress = 0;
+    00000016 21 04 00         [12]   90 	ld	hl, #0x0004
+    00000019 19               [ 8]   91 	add	hl, de
+    0000001A 36 00            [12]   92 	ld	(hl), #0x00
+                                     93 ;src\player.c:15: player -> level         = 1;
+    0000001C 21 09 00         [12]   94 	ld	hl, #0x0009
+    0000001F 19               [ 8]   95 	add	hl, de
+    00000020 36 01            [12]   96 	ld	(hl), #0x01
+                                     97 ;src\player.c:16: player -> xp            = 0;
+    00000022 21 0A 00         [12]   98 	ld	hl, #0x000a
+    00000025 19               [ 8]   99 	add	hl, de
+    00000026 AF               [ 4]  100 	xor	a, a
+    00000027 22               [ 8]  101 	ld	(hl+), a
+    00000028 77               [ 8]  102 	ld	(hl), a
+                                    103 ;src\player.c:17: player -> xp_for_level  = 15;
+    00000029 21 0C 00         [12]  104 	ld	hl, #0x000c
+    0000002C 19               [ 8]  105 	add	hl, de
+    0000002D 3E 0F            [ 8]  106 	ld	a, #0x0f
+    0000002F 22               [ 8]  107 	ld	(hl+), a
+    00000030 36 00            [12]  108 	ld	(hl), #0x00
+                                    109 ;src\player.c:18: player -> player_hp     = 20;
+    00000032 21 05 00         [12]  110 	ld	hl, #0x0005
+    00000035 19               [ 8]  111 	add	hl, de
+    00000036 3E 14            [ 8]  112 	ld	a, #0x14
+    00000038 22               [ 8]  113 	ld	(hl+), a
+    00000039 36 00            [12]  114 	ld	(hl), #0x00
+                                    115 ;src\player.c:19: player -> player_max_hp = 20;
+    0000003B 21 0E 00         [12]  116 	ld	hl, #0x000e
+    0000003E 19               [ 8]  117 	add	hl, de
+    0000003F 3E 14            [ 8]  118 	ld	a, #0x14
+    00000041 22               [ 8]  119 	ld	(hl+), a
+    00000042 36 00            [12]  120 	ld	(hl), #0x00
+                                    121 ;src\player.c:20: player -> player_speed  = 5;
+    00000044 21 07 00         [12]  122 	ld	hl, #0x0007
+    00000047 19               [ 8]  123 	add	hl, de
+    00000048 36 05            [12]  124 	ld	(hl), #0x05
+                                    125 ;src\player.c:21: player -> player_atk    = 3;
+    0000004A 21 08 00         [12]  126 	ld	hl, #0x0008
+    0000004D 19               [ 8]  127 	add	hl, de
+    0000004E 36 03            [12]  128 	ld	(hl), #0x03
+                                    129 ;src\player.c:22: player -> defence       = 2;
+    00000050 21 10 00         [12]  130 	ld	hl, #0x0010
+    00000053 19               [ 8]  131 	add	hl, de
+    00000054 36 02            [12]  132 	ld	(hl), #0x02
+                                    133 ;src\player.c:23: player -> steps         = 0;
+    00000056 21 11 00         [12]  134 	ld	hl, #0x0011
+    00000059 19               [ 8]  135 	add	hl, de
+    0000005A 36 00            [12]  136 	ld	(hl), #0x00
+                                    137 ;src\player.c:25: set_sprite_data(0, 4, GoofyGuy);  // Load sprite tile data
+    0000005C 11r00r00         [12]  138 	ld	de, #_GoofyGuy
+    0000005F D5               [16]  139 	push	de
+    00000060 21 00 04         [12]  140 	ld	hl, #0x400
+    00000063 E5               [16]  141 	push	hl
+    00000064 CDr00r00         [24]  142 	call	_set_sprite_data
+    00000067 E8 04            [16]  143 	add	sp, #4
+                                    144 ;src\../Tools/GBDK/include/gb/gb.h:1875: shadow_OAM[nb].tile=tile;
+    00000069 21r02r00         [12]  145 	ld	hl, #(_shadow_OAM + 2)
+    0000006C 36 00            [12]  146 	ld	(hl), #0x00
+    0000006E 21r06r00         [12]  147 	ld	hl, #(_shadow_OAM + 6)
+    00000071 36 01            [12]  148 	ld	(hl), #0x01
+    00000073 21r0Ar00         [12]  149 	ld	hl, #(_shadow_OAM + 10)
+    00000076 36 02            [12]  150 	ld	(hl), #0x02
+    00000078 21r0Er00         [12]  151 	ld	hl, #(_shadow_OAM + 14)
+    0000007B 36 03            [12]  152 	ld	(hl), #0x03
+                                    153 ;src\player.c:29: set_sprite_tile(3, 3);
+                                    154 ;src\player.c:30: }
+    0000007D E1               [12]  155 	pop	hl
+    0000007E F1               [12]  156 	pop	af
+    0000007F E9               [ 4]  157 	jp	(hl)
+                                    158 ;src\player.c:40: void handlePlayerInput(Player* player) {
+                                    159 ;	---------------------------------
+                                    160 ; Function handlePlayerInput
+                                    161 ; ---------------------------------
+    00000080                        162 _handlePlayerInput::
+    00000080 4B               [ 4]  163 	ld	c, e
+    00000081 42               [ 4]  164 	ld	b, d
+                                    165 ;src\player.c:41: if (player->is_moving == 0) {
+    00000082 69               [ 4]  166 	ld	l, c
+                                    167 ;	spillPairReg hl
+                                    168 ;	spillPairReg hl
+    00000083 60               [ 4]  169 	ld	h, b
+                                    170 ;	spillPairReg hl
+                                    171 ;	spillPairReg hl
+    00000084 23               [ 8]  172 	inc	hl
+    00000085 23               [ 8]  173 	inc	hl
+    00000086 23               [ 8]  174 	inc	hl
+    00000087 7E               [ 8]  175 	ld	a, (hl)
+    00000088 B7               [ 4]  176 	or	a, a
+    00000089 C0               [20]  177 	ret	NZ
+                                    178 ;src\player.c:42: switch (joypad()) {
+    0000008A E5               [16]  179 	push	hl
+    0000008B CDr00r00         [24]  180 	call	_joypad
+    0000008E E1               [12]  181 	pop	hl
+                                    182 ;src\player.c:43: case J_UP:      player->is_moving = 1; player->direction = 0; break;
+    0000008F 03               [ 8]  183 	inc	bc
+    00000090 03               [ 8]  184 	inc	bc
+                                    185 ;src\player.c:42: switch (joypad()) {
+    00000091 FE 01            [ 8]  186 	cp	a, #0x01
+    00000093 28 1D            [12]  187 	jr	Z, 00104$
+    00000095 FE 02            [ 8]  188 	cp	a, #0x02
+    00000097 28 13            [12]  189 	jr	Z, 00103$
+    00000099 FE 04            [ 8]  190 	cp	a, #0x04
+    0000009B 28 05            [12]  191 	jr	Z, 00101$
+    0000009D D6 08            [ 8]  192 	sub	a, #0x08
+    0000009F 28 06            [12]  193 	jr	Z, 00102$
+    000000A1 C9               [16]  194 	ret
+                                    195 ;src\player.c:43: case J_UP:      player->is_moving = 1; player->direction = 0; break;
+    000000A2                        196 00101$:
+    000000A2 36 01            [12]  197 	ld	(hl), #0x01
+    000000A4 AF               [ 4]  198 	xor	a, a
+    000000A5 02               [ 8]  199 	ld	(bc), a
+    000000A6 C9               [16]  200 	ret
+                                    201 ;src\player.c:44: case J_DOWN:    player->is_moving = 1; player->direction = 1; break;
+    000000A7                        202 00102$:
+    000000A7 3E 01            [ 8]  203 	ld	a,#0x01
+    000000A9 77               [ 8]  204 	ld	(hl),a
+    000000AA 02               [ 8]  205 	ld	(bc), a
+    000000AB C9               [16]  206 	ret
+                                    207 ;src\player.c:45: case J_LEFT:    player->is_moving = 1; player->direction = 2; break;
+    000000AC                        208 00103$:
+    000000AC 36 01            [12]  209 	ld	(hl), #0x01
+    000000AE 3E 02            [ 8]  210 	ld	a, #0x02
+    000000B0 02               [ 8]  211 	ld	(bc), a
+    000000B1 C9               [16]  212 	ret
+                                    213 ;src\player.c:46: case J_RIGHT:   player->is_moving = 1; player->direction = 3; break;
+    000000B2                        214 00104$:
+    000000B2 36 01            [12]  215 	ld	(hl), #0x01
+    000000B4 3E 03            [ 8]  216 	ld	a, #0x03
+    000000B6 02               [ 8]  217 	ld	(bc), a
+                                    218 ;src\player.c:47: }
+                                    219 ;src\player.c:49: }
+    000000B7 C9               [16]  220 	ret
+                                    221 ;src\player.c:52: void updatePlayerPosition(Player* player) {
+                                    222 ;	---------------------------------
+                                    223 ; Function updatePlayerPosition
+                                    224 ; ---------------------------------
+    000000B8                        225 _updatePlayerPosition::
+    000000B8 E8 F9            [16]  226 	add	sp, #-7
+    000000BA F8 05            [12]  227 	ldhl	sp,	#5
+    000000BC 7B               [ 4]  228 	ld	a, e
+    000000BD 22               [ 8]  229 	ld	(hl+), a
+                                    230 ;src\player.c:53: if (player->is_moving) {
+    000000BE 7A               [ 4]  231 	ld	a, d
+    000000BF 32               [ 8]  232 	ld	(hl-), a
+    000000C0 2A               [ 8]  233 	ld	a, (hl+)
+    000000C1 5F               [ 4]  234 	ld	e, a
+    000000C2 56               [ 8]  235 	ld	d, (hl)
+    000000C3 21 03 00         [12]  236 	ld	hl, #0x0003
+    000000C6 19               [ 8]  237 	add	hl, de
+    000000C7 33               [ 8]  238 	inc	sp
+    000000C8 33               [ 8]  239 	inc	sp
+    000000C9 5D               [ 4]  240 	ld	e, l
+    000000CA 54               [ 4]  241 	ld	d, h
+    000000CB D5               [16]  242 	push	de
+    000000CC 1A               [ 8]  243 	ld	a, (de)
+    000000CD F8 04            [12]  244 	ldhl	sp,	#4
+    000000CF 77               [ 8]  245 	ld	(hl), a
+    000000D0 B7               [ 4]  246 	or	a, a
+    000000D1 CArB5r01         [16]  247 	jp	Z, 00110$
+                                    248 ;src\player.c:54: switch (player->direction) {
+    000000D4 23               [ 8]  249 	inc	hl
+    000000D5 2A               [ 8]  250 	ld	a, (hl+)
+    000000D6 5F               [ 4]  251 	ld	e, a
+    000000D7 56               [ 8]  252 	ld	d, (hl)
+    000000D8 21 02 00         [12]  253 	ld	hl, #0x0002
+    000000DB 19               [ 8]  254 	add	hl, de
+    000000DC E5               [16]  255 	push	hl
+    000000DD 7D               [ 4]  256 	ld	a, l
+    000000DE F8 05            [12]  257 	ldhl	sp,	#5
+    000000E0 77               [ 8]  258 	ld	(hl), a
+    000000E1 E1               [12]  259 	pop	hl
+    000000E2 7C               [ 4]  260 	ld	a, h
+    000000E3 F8 04            [12]  261 	ldhl	sp,	#4
+    000000E5 32               [ 8]  262 	ld	(hl-), a
+    000000E6 2A               [ 8]  263 	ld	a, (hl+)
+    000000E7 5F               [ 4]  264 	ld	e, a
+    000000E8 3A               [ 8]  265 	ld	a, (hl-)
+    000000E9 2B               [ 8]  266 	dec	hl
+    000000EA 57               [ 4]  267 	ld	d, a
+    000000EB 1A               [ 8]  268 	ld	a, (de)
+    000000EC 77               [ 8]  269 	ld	(hl), a
+                                    270 ;src\player.c:55: case 0: player->y--; break;
+    000000ED F8 05            [12]  271 	ldhl	sp,#5
+    000000EF 2A               [ 8]  272 	ld	a, (hl+)
+    000000F0 5F               [ 4]  273 	ld	e, a
+    000000F1 56               [ 8]  274 	ld	d, (hl)
+    000000F2 6B               [ 4]  275 	ld	l, e
+    000000F3 62               [ 4]  276 	ld	h, d
+    000000F4 23               [ 8]  277 	inc	hl
+    000000F5 E5               [16]  278 	push	hl
+    000000F6 7D               [ 4]  279 	ld	a, l
+    000000F7 F8 05            [12]  280 	ldhl	sp,	#5
+    000000F9 77               [ 8]  281 	ld	(hl), a
+    000000FA E1               [12]  282 	pop	hl
+    000000FB 7C               [ 4]  283 	ld	a, h
+    000000FC F8 04            [12]  284 	ldhl	sp,	#4
+                                    285 ;src\player.c:54: switch (player->direction) {
+    000000FE 32               [ 8]  286 	ld	(hl-), a
+    000000FF 2B               [ 8]  287 	dec	hl
+    00000100 7E               [ 8]  288 	ld	a, (hl)
+    00000101 B7               [ 4]  289 	or	a, a
+    00000102 28 16            [12]  290 	jr	Z, 00101$
+    00000104 F8 02            [12]  291 	ldhl	sp,	#2
+    00000106 7E               [ 8]  292 	ld	a, (hl)
+    00000107 3D               [ 4]  293 	dec	a
+    00000108 28 1E            [12]  294 	jr	Z, 00102$
+    0000010A F8 02            [12]  295 	ldhl	sp,	#2
+    0000010C 7E               [ 8]  296 	ld	a, (hl)
+    0000010D D6 02            [ 8]  297 	sub	a, #0x02
+    0000010F 28 25            [12]  298 	jr	Z, 00103$
+    00000111 F8 02            [12]  299 	ldhl	sp,	#2
+    00000113 7E               [ 8]  300 	ld	a, (hl)
+    00000114 D6 03            [ 8]  301 	sub	a, #0x03
+    00000116 28 2C            [12]  302 	jr	Z, 00104$
+    00000118 18 36            [12]  303 	jr	00105$
+                                    304 ;src\player.c:55: case 0: player->y--; break;
+    0000011A                        305 00101$:
+    0000011A F8 03            [12]  306 	ldhl	sp,#3
+    0000011C 2A               [ 8]  307 	ld	a, (hl+)
+    0000011D 5F               [ 4]  308 	ld	e, a
+    0000011E 56               [ 8]  309 	ld	d, (hl)
+    0000011F 1A               [ 8]  310 	ld	a, (de)
+    00000120 4F               [ 4]  311 	ld	c, a
+    00000121 0D               [ 4]  312 	dec	c
+    00000122 3A               [ 8]  313 	ld	a, (hl-)
+    00000123 6E               [ 8]  314 	ld	l, (hl)
+    00000124 67               [ 4]  315 	ld	h, a
+    00000125 71               [ 8]  316 	ld	(hl), c
+    00000126 18 28            [12]  317 	jr	00105$
+                                    318 ;src\player.c:56: case 1: player->y++; break;
+    00000128                        319 00102$:
+    00000128 F8 03            [12]  320 	ldhl	sp,#3
+    0000012A 2A               [ 8]  321 	ld	a, (hl+)
+    0000012B 5F               [ 4]  322 	ld	e, a
+    0000012C 56               [ 8]  323 	ld	d, (hl)
+    0000012D 1A               [ 8]  324 	ld	a, (de)
+    0000012E 4F               [ 4]  325 	ld	c, a
+    0000012F 0C               [ 4]  326 	inc	c
+    00000130 3A               [ 8]  327 	ld	a, (hl-)
+    00000131 6E               [ 8]  328 	ld	l, (hl)
+    00000132 67               [ 4]  329 	ld	h, a
+    00000133 71               [ 8]  330 	ld	(hl), c
+    00000134 18 1A            [12]  331 	jr	00105$
+                                    332 ;src\player.c:57: case 2: player->x--; break;
+    00000136                        333 00103$:
+    00000136 F8 05            [12]  334 	ldhl	sp,#5
+    00000138 2A               [ 8]  335 	ld	a, (hl+)
+    00000139 5F               [ 4]  336 	ld	e, a
+    0000013A 56               [ 8]  337 	ld	d, (hl)
+    0000013B 1A               [ 8]  338 	ld	a, (de)
+    0000013C 4F               [ 4]  339 	ld	c, a
+    0000013D 0D               [ 4]  340 	dec	c
+    0000013E 3A               [ 8]  341 	ld	a, (hl-)
+    0000013F 6E               [ 8]  342 	ld	l, (hl)
+    00000140 67               [ 4]  343 	ld	h, a
+    00000141 71               [ 8]  344 	ld	(hl), c
+    00000142 18 0C            [12]  345 	jr	00105$
+                                    346 ;src\player.c:58: case 3: player->x++; break;
+    00000144                        347 00104$:
+    00000144 F8 05            [12]  348 	ldhl	sp,#5
+    00000146 2A               [ 8]  349 	ld	a, (hl+)
+    00000147 5F               [ 4]  350 	ld	e, a
+    00000148 56               [ 8]  351 	ld	d, (hl)
+    00000149 1A               [ 8]  352 	ld	a, (de)
+    0000014A 4F               [ 4]  353 	ld	c, a
+    0000014B 0C               [ 4]  354 	inc	c
+    0000014C 3A               [ 8]  355 	ld	a, (hl-)
+    0000014D 6E               [ 8]  356 	ld	l, (hl)
+    0000014E 67               [ 4]  357 	ld	h, a
+    0000014F 71               [ 8]  358 	ld	(hl), c
+                                    359 ;src\player.c:59: }
+    00000150                        360 00105$:
+                                    361 ;src\player.c:61: player->move_progress++;
+    00000150 F8 05            [12]  362 	ldhl	sp,#5
+    00000152 2A               [ 8]  363 	ld	a, (hl+)
+    00000153 5F               [ 4]  364 	ld	e, a
+    00000154 56               [ 8]  365 	ld	d, (hl)
+    00000155 21 04 00         [12]  366 	ld	hl, #0x0004
+    00000158 19               [ 8]  367 	add	hl, de
+    00000159 4D               [ 4]  368 	ld	c, l
+    0000015A 44               [ 4]  369 	ld	b, h
+    0000015B 0A               [ 8]  370 	ld	a, (bc)
+    0000015C 3C               [ 4]  371 	inc	a
+    0000015D 02               [ 8]  372 	ld	(bc), a
+                                    373 ;src\player.c:62: if (player->move_progress == MOVE_DISTANCE) {
+    0000015E D6 10            [ 8]  374 	sub	a, #0x10
+    00000160 20 53            [12]  375 	jr	NZ, 00110$
+                                    376 ;src\player.c:63: player->move_progress = 0;
+    00000162 AF               [ 4]  377 	xor	a, a
+    00000163 02               [ 8]  378 	ld	(bc), a
+                                    379 ;src\player.c:64: player->is_moving = 0;
+    00000164 E1               [12]  380 	pop	hl
+    00000165 36 00            [12]  381 	ld	(hl), #0x00
+    00000167 E5               [16]  382 	push	hl
+                                    383 ;src\player.c:65: player -> steps ++;
+    00000168 F8 05            [12]  384 	ldhl	sp,#5
+    0000016A 2A               [ 8]  385 	ld	a, (hl+)
+    0000016B 5F               [ 4]  386 	ld	e, a
+    0000016C 56               [ 8]  387 	ld	d, (hl)
+    0000016D 21 11 00         [12]  388 	ld	hl, #0x0011
+    00000170 19               [ 8]  389 	add	hl, de
+    00000171 E5               [16]  390 	push	hl
+    00000172 7D               [ 4]  391 	ld	a, l
+    00000173 F8 05            [12]  392 	ldhl	sp,	#5
+    00000175 77               [ 8]  393 	ld	(hl), a
+    00000176 E1               [12]  394 	pop	hl
+    00000177 7C               [ 4]  395 	ld	a, h
+    00000178 F8 04            [12]  396 	ldhl	sp,	#4
+    0000017A 32               [ 8]  397 	ld	(hl-), a
+    0000017B 2A               [ 8]  398 	ld	a, (hl+)
+    0000017C 5F               [ 4]  399 	ld	e, a
+    0000017D 56               [ 8]  400 	ld	d, (hl)
+    0000017E 1A               [ 8]  401 	ld	a, (de)
+    0000017F 4F               [ 4]  402 	ld	c, a
+    00000180 0C               [ 4]  403 	inc	c
+    00000181 3A               [ 8]  404 	ld	a, (hl-)
+    00000182 6E               [ 8]  405 	ld	l, (hl)
+    00000183 67               [ 4]  406 	ld	h, a
+    00000184 71               [ 8]  407 	ld	(hl), c
+                                    408 ;src\player.c:66: gotogxy( 1, 1);
+    00000185 21 01 01         [12]  409 	ld	hl, #0x101
+    00000188 E5               [16]  410 	push	hl
+    00000189 CDr00r00         [24]  411 	call	_gotogxy
+    0000018C E1               [12]  412 	pop	hl
+                                    413 ;src\player.c:67: gprintf( "  ");
+    0000018D 11rB8r01         [12]  414 	ld	de, #___str_0
+    00000190 D5               [16]  415 	push	de
+    00000191 CDr00r00         [24]  416 	call	_gprintf
+    00000194 E1               [12]  417 	pop	hl
+                                    418 ;src\player.c:68: gotogxy( 1, 1);
+    00000195 21 01 01         [12]  419 	ld	hl, #0x101
+    00000198 E5               [16]  420 	push	hl
+    00000199 CDr00r00         [24]  421 	call	_gotogxy
+    0000019C E1               [12]  422 	pop	hl
+                                    423 ;src\player.c:69: gprintf( "%d", player -> steps);
+    0000019D F8 03            [12]  424 	ldhl	sp,#3
+    0000019F 2A               [ 8]  425 	ld	a, (hl+)
+    000001A0 5F               [ 4]  426 	ld	e, a
+    000001A1 56               [ 8]  427 	ld	d, (hl)
+    000001A2 1A               [ 8]  428 	ld	a, (de)
+    000001A3 77               [ 8]  429 	ld	(hl), a
+    000001A4 3A               [ 8]  430 	ld	a, (hl-)
+    000001A5 22               [ 8]  431 	ld	(hl+), a
+    000001A6 AF               [ 4]  432 	xor	a, a
+    000001A7 32               [ 8]  433 	ld	(hl-), a
+    000001A8 5E               [ 8]  434 	ld	e, (hl)
+    000001A9 16 00            [ 8]  435 	ld	d, #0x00
+    000001AB D5               [16]  436 	push	de
+    000001AC 11rBBr01         [12]  437 	ld	de, #___str_1
+    000001AF D5               [16]  438 	push	de
+    000001B0 CDr00r00         [24]  439 	call	_gprintf
+    000001B3 E8 04            [16]  440 	add	sp, #4
+    000001B5                        441 00110$:
+                                    442 ;src\player.c:73: }
+    000001B5 E8 07            [16]  443 	add	sp, #7
+    000001B7 C9               [16]  444 	ret
+    000001B8                        445 ___str_0:
+    000001B8 20 20                  446 	.ascii "  "
+    000001BA 00                     447 	.db 0x00
+    000001BB                        448 ___str_1:
+    000001BB 25 64                  449 	.ascii "%d"
+    000001BD 00                     450 	.db 0x00
+                                    451 ;src\player.c:77: void movePlayerSprites(Player* player) {
+                                    452 ;	---------------------------------
+                                    453 ; Function movePlayerSprites
+                                    454 ; ---------------------------------
+    000001BE                        455 _movePlayerSprites::
+    000001BE E8 FC            [16]  456 	add	sp, #-4
+    000001C0 4B               [ 4]  457 	ld	c, e
+    000001C1 42               [ 4]  458 	ld	b, d
+                                    459 ;src\player.c:78: move_sprite(0, player->x, player->y);
+    000001C2 69               [ 4]  460 	ld	l, c
+    000001C3 60               [ 4]  461 	ld	h, b
+    000001C4 23               [ 8]  462 	inc	hl
+    000001C5 33               [ 8]  463 	inc	sp
+    000001C6 33               [ 8]  464 	inc	sp
+    000001C7 5D               [ 4]  465 	ld	e, l
+    000001C8 54               [ 4]  466 	ld	d, h
+    000001C9 D5               [16]  467 	push	de
+    000001CA 1A               [ 8]  468 	ld	a, (de)
+    000001CB F8 02            [12]  469 	ldhl	sp,	#2
+    000001CD 22               [ 8]  470 	ld	(hl+), a
+    000001CE 0A               [ 8]  471 	ld	a, (bc)
+                                    472 ;src\../Tools/GBDK/include/gb/gb.h:1961: OAM_item_t * itm = &shadow_OAM[nb];
+                                    473 ;src\../Tools/GBDK/include/gb/gb.h:1962: itm->y=y, itm->x=x;
+    000001CF 32               [ 8]  474 	ld	(hl-), a
+    000001D0 11r00r00         [12]  475 	ld	de, #_shadow_OAM+0
+    000001D3 2A               [ 8]  476 	ld	a, (hl+)
+    000001D4 12               [ 8]  477 	ld	(de), a
+    000001D5 13               [ 8]  478 	inc	de
+    000001D6 7E               [ 8]  479 	ld	a, (hl)
+    000001D7 12               [ 8]  480 	ld	(de), a
+                                    481 ;src\player.c:79: move_sprite(1, player->x, player->y + 8);
+    000001D8 D1               [12]  482 	pop	de
+    000001D9 D5               [16]  483 	push	de
+    000001DA 1A               [ 8]  484 	ld	a, (de)
+    000001DB C6 08            [ 8]  485 	add	a, #0x08
+    000001DD 57               [ 4]  486 	ld	d, a
+    000001DE 0A               [ 8]  487 	ld	a, (bc)
+    000001DF 5F               [ 4]  488 	ld	e, a
+                                    489 ;src\../Tools/GBDK/include/gb/gb.h:1961: OAM_item_t * itm = &shadow_OAM[nb];
+    000001E0 21r04r00         [12]  490 	ld	hl, #(_shadow_OAM + 4)
+                                    491 ;src\../Tools/GBDK/include/gb/gb.h:1962: itm->y=y, itm->x=x;
+    000001E3 7A               [ 4]  492 	ld	a, d
+    000001E4 22               [ 8]  493 	ld	(hl+), a
+    000001E5 73               [ 8]  494 	ld	(hl), e
+                                    495 ;src\player.c:80: move_sprite(2, player->x + 8, player->y);
+    000001E6 D1               [12]  496 	pop	de
+    000001E7 D5               [16]  497 	push	de
+    000001E8 1A               [ 8]  498 	ld	a, (de)
+    000001E9 F8 02            [12]  499 	ldhl	sp,	#2
+    000001EB 22               [ 8]  500 	ld	(hl+), a
+    000001EC 0A               [ 8]  501 	ld	a, (bc)
+    000001ED C6 08            [ 8]  502 	add	a, #0x08
+                                    503 ;src\../Tools/GBDK/include/gb/gb.h:1961: OAM_item_t * itm = &shadow_OAM[nb];
+                                    504 ;src\../Tools/GBDK/include/gb/gb.h:1962: itm->y=y, itm->x=x;
+    000001EF 32               [ 8]  505 	ld	(hl-), a
+    000001F0 11r08r00         [12]  506 	ld	de, #_shadow_OAM+8
+    000001F3 2A               [ 8]  507 	ld	a, (hl+)
+    000001F4 12               [ 8]  508 	ld	(de), a
+    000001F5 13               [ 8]  509 	inc	de
+    000001F6 7E               [ 8]  510 	ld	a, (hl)
+    000001F7 12               [ 8]  511 	ld	(de), a
+                                    512 ;src\player.c:81: move_sprite(3, player->x + 8, player->y + 8);
+    000001F8 D1               [12]  513 	pop	de
+    000001F9 D5               [16]  514 	push	de
+    000001FA 1A               [ 8]  515 	ld	a, (de)
+    000001FB C6 08            [ 8]  516 	add	a, #0x08
+    000001FD 5F               [ 4]  517 	ld	e, a
+    000001FE 0A               [ 8]  518 	ld	a, (bc)
+    000001FF C6 08            [ 8]  519 	add	a, #0x08
+    00000201 4F               [ 4]  520 	ld	c, a
+                                    521 ;src\../Tools/GBDK/include/gb/gb.h:1961: OAM_item_t * itm = &shadow_OAM[nb];
+    00000202 21r0Cr00         [12]  522 	ld	hl, #(_shadow_OAM + 12)
+                                    523 ;src\../Tools/GBDK/include/gb/gb.h:1962: itm->y=y, itm->x=x;
+    00000205 7B               [ 4]  524 	ld	a, e
+    00000206 22               [ 8]  525 	ld	(hl+), a
+    00000207 71               [ 8]  526 	ld	(hl), c
+                                    527 ;src\player.c:81: move_sprite(3, player->x + 8, player->y + 8);
+                                    528 ;src\player.c:83: }
+    00000208 E8 04            [16]  529 	add	sp, #4
+    0000020A C9               [16]  530 	ret
+                                    531 	.area _CODE
+                                    532 	.area _INITIALIZER
+    00000000                        533 __xinit__GoofyGuy:
+    00000000 7F                     534 	.db #0x7f	; 127
+    00000001 7F                     535 	.db #0x7f	; 127
+    00000002 FF                     536 	.db #0xff	; 255
+    00000003 80                     537 	.db #0x80	; 128
+    00000004 FF                     538 	.db #0xff	; 255
+    00000005 80                     539 	.db #0x80	; 128
+    00000006 FF                     540 	.db #0xff	; 255
+    00000007 8E                     541 	.db #0x8e	; 142
+    00000008 BF                     542 	.db #0xbf	; 191
+    00000009 C0                     543 	.db #0xc0	; 192
+    0000000A C7                     544 	.db #0xc7	; 199
+    0000000B FF                     545 	.db #0xff	; 255
+    0000000C FE                     546 	.db #0xfe	; 254
+    0000000D FF                     547 	.db #0xff	; 255
+    0000000E FF                     548 	.db #0xff	; 255
+    0000000F FF                     549 	.db #0xff	; 255
+    00000010 7F                     550 	.db #0x7f	; 127
+    00000011 7F                     551 	.db #0x7f	; 127
+    00000012 70                     552 	.db #0x70	; 112	'p'
+    00000013 5F                     553 	.db #0x5f	; 95
+    00000014 F0                     554 	.db #0xf0	; 240
+    00000015 9F                     555 	.db #0x9f	; 159
+    00000016 F0                     556 	.db #0xf0	; 240
+    00000017 9F                     557 	.db #0x9f	; 159
+    00000018 70                     558 	.db #0x70	; 112	'p'
+    00000019 7F                     559 	.db #0x7f	; 127
+    0000001A 1F                     560 	.db #0x1f	; 31
+    0000001B 1F                     561 	.db #0x1f	; 31
+    0000001C 1E                     562 	.db #0x1e	; 30
+    0000001D 12                     563 	.db #0x12	; 18
+    0000001E 1E                     564 	.db #0x1e	; 30
+    0000001F 1E                     565 	.db #0x1e	; 30
+    00000020 FE                     566 	.db #0xfe	; 254
+    00000021 FE                     567 	.db #0xfe	; 254
+    00000022 FF                     568 	.db #0xff	; 255
+    00000023 01                     569 	.db #0x01	; 1
+    00000024 FF                     570 	.db #0xff	; 255
+    00000025 01                     571 	.db #0x01	; 1
+    00000026 FF                     572 	.db #0xff	; 255
+    00000027 71                     573 	.db #0x71	; 113	'q'
+    00000028 FD                     574 	.db #0xfd	; 253
+    00000029 03                     575 	.db #0x03	; 3
+    0000002A E3                     576 	.db #0xe3	; 227
+    0000002B FF                     577 	.db #0xff	; 255
+    0000002C 7F                     578 	.db #0x7f	; 127
+    0000002D FF                     579 	.db #0xff	; 255
+    0000002E FF                     580 	.db #0xff	; 255
+    0000002F FF                     581 	.db #0xff	; 255
+    00000030 FE                     582 	.db #0xfe	; 254
+    00000031 FE                     583 	.db #0xfe	; 254
+    00000032 0E                     584 	.db #0x0e	; 14
+    00000033 FA                     585 	.db #0xfa	; 250
+    00000034 0F                     586 	.db #0x0f	; 15
+    00000035 F9                     587 	.db #0xf9	; 249
+    00000036 0F                     588 	.db #0x0f	; 15
+    00000037 F9                     589 	.db #0xf9	; 249
+    00000038 0E                     590 	.db #0x0e	; 14
+    00000039 FE                     591 	.db #0xfe	; 254
+    0000003A F8                     592 	.db #0xf8	; 248
+    0000003B F8                     593 	.db #0xf8	; 248
+    0000003C 78                     594 	.db #0x78	; 120	'x'
+    0000003D 48                     595 	.db #0x48	; 72	'H'
+    0000003E 78                     596 	.db #0x78	; 120	'x'
+    0000003F 78                     597 	.db #0x78	; 120	'x'
+                                    598 	.area _CABS (ABS)

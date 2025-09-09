@@ -1,0 +1,1079 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.4.1 #14650 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module battle
+                                      6 	.optsdcc -msm83
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _inputSelection
+                                     12 	.globl _battleClear
+                                     13 	.globl _victory
+                                     14 	.globl _enemyAttacks
+                                     15 	.globl _enemyHit
+                                     16 	.globl _enemyAppears
+                                     17 	.globl _battleWindowUpdate
+                                     18 	.globl _clearText
+                                     19 	.globl _gotogxy
+                                     20 	.globl _gprintf
+                                     21 	.globl _joypad
+                                     22 	.globl _delay
+                                     23 	.globl _battle
+                                     24 ;--------------------------------------------------------
+                                     25 ; special function registers
+                                     26 ;--------------------------------------------------------
+                                     27 ;--------------------------------------------------------
+                                     28 ; ram data
+                                     29 ;--------------------------------------------------------
+                                     30 	.area _DATA
+                                     31 ;--------------------------------------------------------
+                                     32 ; ram data
+                                     33 ;--------------------------------------------------------
+                                     34 	.area _INITIALIZED
+                                     35 ;--------------------------------------------------------
+                                     36 ; absolute external ram data
+                                     37 ;--------------------------------------------------------
+                                     38 	.area _DABS (ABS)
+                                     39 ;--------------------------------------------------------
+                                     40 ; global & static initialisations
+                                     41 ;--------------------------------------------------------
+                                     42 	.area _HOME
+                                     43 	.area _GSINIT
+                                     44 	.area _GSFINAL
+                                     45 	.area _GSINIT
+                                     46 ;--------------------------------------------------------
+                                     47 ; Home
+                                     48 ;--------------------------------------------------------
+                                     49 	.area _HOME
+                                     50 	.area _HOME
+                                     51 ;--------------------------------------------------------
+                                     52 ; code
+                                     53 ;--------------------------------------------------------
+                                     54 	.area _CODE
+                                     55 ;src\battle.c:3: uint8_t enemyAppears( char enemy_name[] ) {
+                                     56 ;	---------------------------------
+                                     57 ; Function enemyAppears
+                                     58 ; ---------------------------------
+    00000000                         59 _enemyAppears::
+                                     60 ;src\battle.c:5: clearText();
+    00000000 D5               [16]   61 	push	de
+    00000001 CDr00r00         [24]   62 	call	_clearText
+    00000004 3E 0F            [ 8]   63 	ld	a, #0x0f
+    00000006 F5               [16]   64 	push	af
+    00000007 33               [ 8]   65 	inc	sp
+    00000008 AF               [ 4]   66 	xor	a, a
+    00000009 F5               [16]   67 	push	af
+    0000000A 33               [ 8]   68 	inc	sp
+    0000000B CDr00r00         [24]   69 	call	_gotogxy
+    0000000E E1               [12]   70 	pop	hl
+    0000000F 11r31r00         [12]   71 	ld	de, #___str_0
+    00000012 D5               [16]   72 	push	de
+    00000013 CDr00r00         [24]   73 	call	_gprintf
+    00000016 E8 04            [16]   74 	add	sp, #4
+                                     75 ;src\battle.c:8: while ( wait = 1 ) {
+    00000018                         76 00103$:
+                                     77 ;src\battle.c:9: delay(200);
+    00000018 11 C8 00         [12]   78 	ld	de, #0x00c8
+    0000001B CDr00r00         [24]   79 	call	_delay
+                                     80 ;src\battle.c:10: if ( joypad() & J_A ) {
+    0000001E CDr00r00         [24]   81 	call	_joypad
+    00000021 CB 67            [ 8]   82 	bit	4, a
+    00000023 28 F3            [12]   83 	jr	Z, 00103$
+                                     84 ;src\battle.c:11: delay(200);
+    00000025 11 C8 00         [12]   85 	ld	de, #0x00c8
+    00000028 CDr00r00         [24]   86 	call	_delay
+                                     87 ;src\battle.c:12: clearText();
+    0000002B CDr00r00         [24]   88 	call	_clearText
+                                     89 ;src\battle.c:13: return 1;
+    0000002E 3E 01            [ 8]   90 	ld	a, #0x01
+                                     91 ;src\battle.c:16: }
+    00000030 C9               [16]   92 	ret
+    00000031                         93 ___str_0:
+    00000031 45 4E 45 4D 59 20 25    94 	.ascii "ENEMY %s APPEARS!"
+             73 20 41 50 50 45 41
+             52 53 21
+    00000042 00                      95 	.db 0x00
+                                     96 ;src\battle.c:22: uint16_t enemyHit( char enemy_name[] , uint16_t enemyhp, uint8_t damage ) {
+                                     97 ;	---------------------------------
+                                     98 ; Function enemyHit
+                                     99 ; ---------------------------------
+    00000043                        100 _enemyHit::
+    00000043 3B               [ 8]  101 	dec	sp
+    00000044 3B               [ 8]  102 	dec	sp
+                                    103 ;src\battle.c:24: clearText();
+    00000045 C5               [16]  104 	push	bc
+    00000046 D5               [16]  105 	push	de
+    00000047 CDr00r00         [24]  106 	call	_clearText
+    0000004A 21 00 0F         [12]  107 	ld	hl, #0xf00
+    0000004D E5               [16]  108 	push	hl
+    0000004E CDr00r00         [24]  109 	call	_gotogxy
+    00000051 E1               [12]  110 	pop	hl
+    00000052 11rBDr00         [12]  111 	ld	de, #___str_1
+    00000055 D5               [16]  112 	push	de
+    00000056 CDr00r00         [24]  113 	call	_gprintf
+    00000059 E8 04            [16]  114 	add	sp, #4
+    0000005B 21 00 10         [12]  115 	ld	hl, #0x1000
+    0000005E E5               [16]  116 	push	hl
+    0000005F CDr00r00         [24]  117 	call	_gotogxy
+    00000062 E1               [12]  118 	pop	hl
+    00000063 C1               [12]  119 	pop	bc
+    00000064 F8 04            [12]  120 	ldhl	sp,	#4
+    00000066 7E               [ 8]  121 	ld	a, (hl)
+    00000067 F8 00            [12]  122 	ldhl	sp,	#0
+    00000069 22               [ 8]  123 	ld	(hl+), a
+    0000006A 36 00            [12]  124 	ld	(hl), #0x00
+    0000006C 2B               [ 8]  125 	dec	hl
+    0000006D C5               [16]  126 	push	bc
+    0000006E 5E               [ 8]  127 	ld	e, (hl)
+    0000006F 16 00            [ 8]  128 	ld	d, #0x00
+    00000071 D5               [16]  129 	push	de
+    00000072 11rCEr00         [12]  130 	ld	de, #___str_2
+    00000075 D5               [16]  131 	push	de
+    00000076 CDr00r00         [24]  132 	call	_gprintf
+    00000079 E8 04            [16]  133 	add	sp, #4
+    0000007B C1               [12]  134 	pop	bc
+                                    135 ;src\battle.c:29: while ( 1 ) {
+    0000007C                        136 00108$:
+                                    137 ;src\battle.c:30: delay(200);
+    0000007C C5               [16]  138 	push	bc
+    0000007D 11 C8 00         [12]  139 	ld	de, #0x00c8
+    00000080 CDr00r00         [24]  140 	call	_delay
+    00000083 C1               [12]  141 	pop	bc
+                                    142 ;src\battle.c:31: if ( joypad() & J_A ) {
+    00000084 CDr00r00         [24]  143 	call	_joypad
+    00000087 CB 67            [ 8]  144 	bit	4, a
+    00000089 28 F1            [12]  145 	jr	Z, 00108$
+                                    146 ;src\battle.c:32: delay(200);
+    0000008B C5               [16]  147 	push	bc
+    0000008C 11 C8 00         [12]  148 	ld	de, #0x00c8
+    0000008F CDr00r00         [24]  149 	call	_delay
+    00000092 CDr00r00         [24]  150 	call	_clearText
+    00000095 C1               [12]  151 	pop	bc
+                                    152 ;src\battle.c:34: if (enemyhp >= damage) {
+    00000096 F8 04            [12]  153 	ldhl	sp,	#4
+    00000098 5E               [ 8]  154 	ld	e, (hl)
+    00000099 16 00            [ 8]  155 	ld	d, #0x00
+    0000009B 79               [ 4]  156 	ld	a, c
+    0000009C 93               [ 4]  157 	sub	a, e
+    0000009D 78               [ 4]  158 	ld	a, b
+    0000009E 9A               [ 4]  159 	sbc	a, d
+    0000009F 3E 00            [ 8]  160 	ld	a, #0x00
+    000000A1 17               [ 4]  161 	rla
+    000000A2 5F               [ 4]  162 	ld	e, a
+    000000A3 CB 43            [ 8]  163 	bit	0, e
+    000000A5 20 0A            [12]  164 	jr	NZ, 00102$
+                                    165 ;src\battle.c:35: enemyhp -= damage;
+    000000A7 D1               [12]  166 	pop	de
+    000000A8 D5               [16]  167 	push	de
+    000000A9 79               [ 4]  168 	ld	a, c
+    000000AA 93               [ 4]  169 	sub	a, e
+    000000AB 4F               [ 4]  170 	ld	c, a
+    000000AC 78               [ 4]  171 	ld	a, b
+    000000AD 9A               [ 4]  172 	sbc	a, d
+    000000AE 47               [ 4]  173 	ld	b, a
+                                    174 ;src\battle.c:36: return enemyhp;
+    000000AF 18 07            [12]  175 	jr	00110$
+    000000B1                        176 00102$:
+                                    177 ;src\battle.c:39: if (enemyhp < damage) {
+    000000B1 7B               [ 4]  178 	ld	a, e
+    000000B2 B7               [ 4]  179 	or	a, a
+    000000B3 28 C7            [12]  180 	jr	Z, 00108$
+                                    181 ;src\battle.c:40: return 0;
+    000000B5 01 00 00         [12]  182 	ld	bc, #0x0000
+    000000B8                        183 00110$:
+                                    184 ;src\battle.c:44: }
+    000000B8 33               [ 8]  185 	inc	sp
+    000000B9 33               [ 8]  186 	inc	sp
+    000000BA E1               [12]  187 	pop	hl
+    000000BB 33               [ 8]  188 	inc	sp
+    000000BC E9               [ 4]  189 	jp	(hl)
+    000000BD                        190 ___str_1:
+    000000BD 59 4F 55 20 41 54 54   191 	.ascii "YOU ATTACKED %s!"
+             41 43 4B 45 44 20 25
+             73 21
+    000000CD 00                     192 	.db 0x00
+    000000CE                        193 ___str_2:
+    000000CE 25 64 20 44 41 4D 41   194 	.ascii "%d DAMAGE!"
+             47 45 21
+    000000D8 00                     195 	.db 0x00
+                                    196 ;src\battle.c:46: uint8_t enemyAttacks( char enemy_name[] , uint8_t damage) {
+                                    197 ;	---------------------------------
+                                    198 ; Function enemyAttacks
+                                    199 ; ---------------------------------
+    000000D9                        200 _enemyAttacks::
+    000000D9 3B               [ 8]  201 	dec	sp
+    000000DA F8 00            [12]  202 	ldhl	sp,	#0
+    000000DC 77               [ 8]  203 	ld	(hl), a
+                                    204 ;src\battle.c:48: clearText();
+    000000DD D5               [16]  205 	push	de
+    000000DE CDr00r00         [24]  206 	call	_clearText
+    000000E1 21 00 0F         [12]  207 	ld	hl, #0xf00
+    000000E4 E5               [16]  208 	push	hl
+    000000E5 CDr00r00         [24]  209 	call	_gotogxy
+    000000E8 E1               [12]  210 	pop	hl
+    000000E9 11r26r01         [12]  211 	ld	de, #___str_3
+    000000EC D5               [16]  212 	push	de
+    000000ED CDr00r00         [24]  213 	call	_gprintf
+    000000F0 E8 04            [16]  214 	add	sp, #4
+                                    215 ;src\battle.c:50: gotogxy( 0 , 16 );  gprintf( "%d DAMAGE!", damage);
+    000000F2 3E 10            [ 8]  216 	ld	a, #0x10
+    000000F4 F5               [16]  217 	push	af
+    000000F5 33               [ 8]  218 	inc	sp
+    000000F6 AF               [ 4]  219 	xor	a, a
+    000000F7 F5               [16]  220 	push	af
+    000000F8 33               [ 8]  221 	inc	sp
+    000000F9 CDr00r00         [24]  222 	call	_gotogxy
+    000000FC E1               [12]  223 	pop	hl
+    000000FD F8 00            [12]  224 	ldhl	sp,	#0
+    000000FF 4E               [ 8]  225 	ld	c, (hl)
+    00000100 06 00            [ 8]  226 	ld	b, #0x00
+    00000102 C5               [16]  227 	push	bc
+    00000103 11r32r01         [12]  228 	ld	de, #___str_4
+    00000106 D5               [16]  229 	push	de
+    00000107 CDr00r00         [24]  230 	call	_gprintf
+    0000010A E8 04            [16]  231 	add	sp, #4
+                                    232 ;src\battle.c:52: while ( wait = 1 ) {
+    0000010C                        233 00103$:
+                                    234 ;src\battle.c:53: delay(200);
+    0000010C 11 C8 00         [12]  235 	ld	de, #0x00c8
+    0000010F CDr00r00         [24]  236 	call	_delay
+                                    237 ;src\battle.c:54: if ( joypad() & J_A ) {
+    00000112 CDr00r00         [24]  238 	call	_joypad
+    00000115 CB 67            [ 8]  239 	bit	4, a
+    00000117 28 F3            [12]  240 	jr	Z, 00103$
+                                    241 ;src\battle.c:55: delay(200);
+    00000119 11 C8 00         [12]  242 	ld	de, #0x00c8
+    0000011C CDr00r00         [24]  243 	call	_delay
+                                    244 ;src\battle.c:56: clearText();
+    0000011F CDr00r00         [24]  245 	call	_clearText
+                                    246 ;src\battle.c:57: return 1;
+    00000122 3E 01            [ 8]  247 	ld	a, #0x01
+                                    248 ;src\battle.c:60: }
+    00000124 33               [ 8]  249 	inc	sp
+    00000125 C9               [16]  250 	ret
+    00000126                        251 ___str_3:
+    00000126 25 73 20 41 54 54 41   252 	.ascii "%s ATTACKS!"
+             43 4B 53 21
+    00000131 00                     253 	.db 0x00
+    00000132                        254 ___str_4:
+    00000132 25 64 20 44 41 4D 41   255 	.ascii "%d DAMAGE!"
+             47 45 21
+    0000013C 00                     256 	.db 0x00
+                                    257 ;src\battle.c:62: uint8_t victory( char enemy_name[] , uint8_t xp) {
+                                    258 ;	---------------------------------
+                                    259 ; Function victory
+                                    260 ; ---------------------------------
+    0000013D                        261 _victory::
+    0000013D 3B               [ 8]  262 	dec	sp
+    0000013E F8 00            [12]  263 	ldhl	sp,	#0
+    00000140 77               [ 8]  264 	ld	(hl), a
+                                    265 ;src\battle.c:64: clearText();
+    00000141 D5               [16]  266 	push	de
+    00000142 CDr00r00         [24]  267 	call	_clearText
+    00000145 21 00 0F         [12]  268 	ld	hl, #0xf00
+    00000148 E5               [16]  269 	push	hl
+    00000149 CDr00r00         [24]  270 	call	_gotogxy
+    0000014C E1               [12]  271 	pop	hl
+    0000014D 11r8Ar01         [12]  272 	ld	de, #___str_5
+    00000150 D5               [16]  273 	push	de
+    00000151 CDr00r00         [24]  274 	call	_gprintf
+    00000154 E8 04            [16]  275 	add	sp, #4
+                                    276 ;src\battle.c:66: gotogxy( 0 , 16 );  gprintf( "YOU GAIN %d XP!", xp);
+    00000156 3E 10            [ 8]  277 	ld	a, #0x10
+    00000158 F5               [16]  278 	push	af
+    00000159 33               [ 8]  279 	inc	sp
+    0000015A AF               [ 4]  280 	xor	a, a
+    0000015B F5               [16]  281 	push	af
+    0000015C 33               [ 8]  282 	inc	sp
+    0000015D CDr00r00         [24]  283 	call	_gotogxy
+    00000160 E1               [12]  284 	pop	hl
+    00000161 F8 00            [12]  285 	ldhl	sp,	#0
+    00000163 4E               [ 8]  286 	ld	c, (hl)
+    00000164 06 00            [ 8]  287 	ld	b, #0x00
+    00000166 C5               [16]  288 	push	bc
+    00000167 11r96r01         [12]  289 	ld	de, #___str_6
+    0000016A D5               [16]  290 	push	de
+    0000016B CDr00r00         [24]  291 	call	_gprintf
+    0000016E E8 04            [16]  292 	add	sp, #4
+                                    293 ;src\battle.c:68: while ( wait = 1 ) {
+    00000170                        294 00103$:
+                                    295 ;src\battle.c:69: delay(200);
+    00000170 11 C8 00         [12]  296 	ld	de, #0x00c8
+    00000173 CDr00r00         [24]  297 	call	_delay
+                                    298 ;src\battle.c:70: if ( joypad() & J_A ) {
+    00000176 CDr00r00         [24]  299 	call	_joypad
+    00000179 CB 67            [ 8]  300 	bit	4, a
+    0000017B 28 F3            [12]  301 	jr	Z, 00103$
+                                    302 ;src\battle.c:71: delay(200);
+    0000017D 11 C8 00         [12]  303 	ld	de, #0x00c8
+    00000180 CDr00r00         [24]  304 	call	_delay
+                                    305 ;src\battle.c:72: clearText();
+    00000183 CDr00r00         [24]  306 	call	_clearText
+                                    307 ;src\battle.c:73: return 1;
+    00000186 3E 01            [ 8]  308 	ld	a, #0x01
+                                    309 ;src\battle.c:76: }
+    00000188 33               [ 8]  310 	inc	sp
+    00000189 C9               [16]  311 	ret
+    0000018A                        312 ___str_5:
+    0000018A 25 73 20 49 53 20 44   313 	.ascii "%s IS DEAD!"
+             45 41 44 21
+    00000195 00                     314 	.db 0x00
+    00000196                        315 ___str_6:
+    00000196 59 4F 55 20 47 41 49   316 	.ascii "YOU GAIN %d XP!"
+             4E 20 25 64 20 58 50
+             21
+    000001A5 00                     317 	.db 0x00
+                                    318 ;src\battle.c:78: void battleClear( void ) {
+                                    319 ;	---------------------------------
+                                    320 ; Function battleClear
+                                    321 ; ---------------------------------
+    000001A6                        322 _battleClear::
+                                    323 ;src\battle.c:79: gotogxy( 0 , 0 );
+    000001A6 AF               [ 4]  324 	xor	a, a
+    000001A7 0F               [ 4]  325 	rrca
+    000001A8 F5               [16]  326 	push	af
+    000001A9 CDr00r00         [24]  327 	call	_gotogxy
+    000001AC E1               [12]  328 	pop	hl
+                                    329 ;src\battle.c:80: for (uint16_t i = 0 ; i < 360; i++) {
+    000001AD 01 00 00         [12]  330 	ld	bc, #0x0000
+    000001B0                        331 00103$:
+    000001B0 59               [ 4]  332 	ld	e, c
+    000001B1 50               [ 4]  333 	ld	d, b
+    000001B2 7B               [ 4]  334 	ld	a, e
+    000001B3 D6 68            [ 8]  335 	sub	a, #0x68
+    000001B5 7A               [ 4]  336 	ld	a, d
+    000001B6 DE 01            [ 8]  337 	sbc	a, #0x01
+    000001B8 D0               [20]  338 	ret	NC
+                                    339 ;src\battle.c:81: gprintf(" ");
+    000001B9 C5               [16]  340 	push	bc
+    000001BA 11rC6r01         [12]  341 	ld	de, #___str_7
+    000001BD D5               [16]  342 	push	de
+    000001BE CDr00r00         [24]  343 	call	_gprintf
+    000001C1 E1               [12]  344 	pop	hl
+    000001C2 C1               [12]  345 	pop	bc
+                                    346 ;src\battle.c:80: for (uint16_t i = 0 ; i < 360; i++) {
+    000001C3 03               [ 8]  347 	inc	bc
+                                    348 ;src\battle.c:83: }
+    000001C4 18 EA            [12]  349 	jr	00103$
+    000001C6                        350 ___str_7:
+    000001C6 20                     351 	.ascii " "
+    000001C7 00                     352 	.db 0x00
+                                    353 ;src\battle.c:85: void inputSelection( uint8_t select ) {
+                                    354 ;	---------------------------------
+                                    355 ; Function inputSelection
+                                    356 ; ---------------------------------
+    000001C8                        357 _inputSelection::
+    000001C8 3B               [ 8]  358 	dec	sp
+    000001C9 F8 00            [12]  359 	ldhl	sp,	#0
+    000001CB 77               [ 8]  360 	ld	(hl), a
+                                    361 ;src\battle.c:87: gotogxy(  1 , 16 );     gprintf( "Attack" ); 
+    000001CC 21 01 10         [12]  362 	ld	hl, #0x1001
+    000001CF E5               [16]  363 	push	hl
+    000001D0 CDr00r00         [24]  364 	call	_gotogxy
+    000001D3 E1               [12]  365 	pop	hl
+    000001D4 11r36r03         [12]  366 	ld	de, #___str_8
+    000001D7 D5               [16]  367 	push	de
+    000001D8 CDr00r00         [24]  368 	call	_gprintf
+    000001DB E1               [12]  369 	pop	hl
+                                    370 ;src\battle.c:88: gotogxy( 11 , 16 );     gprintf( "Item" );
+    000001DC 21 0B 10         [12]  371 	ld	hl, #0x100b
+    000001DF E5               [16]  372 	push	hl
+    000001E0 CDr00r00         [24]  373 	call	_gotogxy
+    000001E3 E1               [12]  374 	pop	hl
+    000001E4 11r3Dr03         [12]  375 	ld	de, #___str_9
+    000001E7 D5               [16]  376 	push	de
+    000001E8 CDr00r00         [24]  377 	call	_gprintf
+    000001EB E1               [12]  378 	pop	hl
+                                    379 ;src\battle.c:89: gotogxy(  1 , 17 );     gprintf( "Special" );
+    000001EC 21 01 11         [12]  380 	ld	hl, #0x1101
+    000001EF E5               [16]  381 	push	hl
+    000001F0 CDr00r00         [24]  382 	call	_gotogxy
+    000001F3 E1               [12]  383 	pop	hl
+    000001F4 11r42r03         [12]  384 	ld	de, #___str_10
+    000001F7 D5               [16]  385 	push	de
+    000001F8 CDr00r00         [24]  386 	call	_gprintf
+    000001FB E1               [12]  387 	pop	hl
+                                    388 ;src\battle.c:90: gotogxy( 11 , 17 );     gprintf( "Escape" );
+    000001FC 21 0B 11         [12]  389 	ld	hl, #0x110b
+    000001FF E5               [16]  390 	push	hl
+    00000200 CDr00r00         [24]  391 	call	_gotogxy
+    00000203 E1               [12]  392 	pop	hl
+    00000204 11r4Ar03         [12]  393 	ld	de, #___str_11
+    00000207 D5               [16]  394 	push	de
+    00000208 CDr00r00         [24]  395 	call	_gprintf
+    0000020B E1               [12]  396 	pop	hl
+                                    397 ;src\battle.c:92: switch (select) {
+    0000020C F8 00            [12]  398 	ldhl	sp,	#0
+    0000020E 7E               [ 8]  399 	ld	a, (hl)
+    0000020F 3D               [ 4]  400 	dec	a
+    00000210 28 1A            [12]  401 	jr	Z, 00101$
+    00000212 F8 00            [12]  402 	ldhl	sp,	#0
+    00000214 7E               [ 8]  403 	ld	a, (hl)
+    00000215 D6 02            [ 8]  404 	sub	a, #0x02
+    00000217 28 56            [12]  405 	jr	Z, 00102$
+    00000219 F8 00            [12]  406 	ldhl	sp,	#0
+    0000021B 7E               [ 8]  407 	ld	a, (hl)
+    0000021C D6 03            [ 8]  408 	sub	a, #0x03
+    0000021E CArB2r02         [16]  409 	jp	Z,00103$
+    00000221 F8 00            [12]  410 	ldhl	sp,	#0
+    00000223 7E               [ 8]  411 	ld	a, (hl)
+    00000224 D6 04            [ 8]  412 	sub	a, #0x04
+    00000226 CArF4r02         [16]  413 	jp	Z,00104$
+    00000229 C3r34r03         [16]  414 	jp	00106$
+                                    415 ;src\battle.c:93: case 1 : 
+    0000022C                        416 00101$:
+                                    417 ;src\battle.c:94: gotogxy(  0 , 16 ); gprintf( ">" );     gotogxy( 10 , 16 ); gprintf( " " );
+    0000022C 21 00 10         [12]  418 	ld	hl, #0x1000
+    0000022F E5               [16]  419 	push	hl
+    00000230 CDr00r00         [24]  420 	call	_gotogxy
+    00000233 E1               [12]  421 	pop	hl
+    00000234 11r51r03         [12]  422 	ld	de, #___str_12
+    00000237 D5               [16]  423 	push	de
+    00000238 CDr00r00         [24]  424 	call	_gprintf
+    0000023B E1               [12]  425 	pop	hl
+    0000023C 21 0A 10         [12]  426 	ld	hl, #0x100a
+    0000023F E5               [16]  427 	push	hl
+    00000240 CDr00r00         [24]  428 	call	_gotogxy
+    00000243 E1               [12]  429 	pop	hl
+    00000244 11r53r03         [12]  430 	ld	de, #___str_13
+    00000247 D5               [16]  431 	push	de
+    00000248 CDr00r00         [24]  432 	call	_gprintf
+    0000024B E1               [12]  433 	pop	hl
+                                    434 ;src\battle.c:95: gotogxy(  0 , 17 ); gprintf( " " );     gotogxy( 10 , 17 ); gprintf( " " );
+    0000024C 21 00 11         [12]  435 	ld	hl, #0x1100
+    0000024F E5               [16]  436 	push	hl
+    00000250 CDr00r00         [24]  437 	call	_gotogxy
+    00000253 E1               [12]  438 	pop	hl
+    00000254 11r53r03         [12]  439 	ld	de, #___str_13
+    00000257 D5               [16]  440 	push	de
+    00000258 CDr00r00         [24]  441 	call	_gprintf
+    0000025B E1               [12]  442 	pop	hl
+    0000025C 21 0A 11         [12]  443 	ld	hl, #0x110a
+    0000025F E5               [16]  444 	push	hl
+    00000260 CDr00r00         [24]  445 	call	_gotogxy
+    00000263 E1               [12]  446 	pop	hl
+    00000264 11r53r03         [12]  447 	ld	de, #___str_13
+    00000267 D5               [16]  448 	push	de
+    00000268 CDr00r00         [24]  449 	call	_gprintf
+    0000026B E1               [12]  450 	pop	hl
+                                    451 ;src\battle.c:96: break;
+    0000026C C3r34r03         [16]  452 	jp	00106$
+                                    453 ;src\battle.c:98: case 2 : 
+    0000026F                        454 00102$:
+                                    455 ;src\battle.c:99: gotogxy(  0 , 16 ); gprintf( " " );     gotogxy( 10 , 16 ); gprintf( ">" );
+    0000026F 21 00 10         [12]  456 	ld	hl, #0x1000
+    00000272 E5               [16]  457 	push	hl
+    00000273 CDr00r00         [24]  458 	call	_gotogxy
+    00000276 E1               [12]  459 	pop	hl
+    00000277 11r53r03         [12]  460 	ld	de, #___str_13
+    0000027A D5               [16]  461 	push	de
+    0000027B CDr00r00         [24]  462 	call	_gprintf
+    0000027E E1               [12]  463 	pop	hl
+    0000027F 21 0A 10         [12]  464 	ld	hl, #0x100a
+    00000282 E5               [16]  465 	push	hl
+    00000283 CDr00r00         [24]  466 	call	_gotogxy
+    00000286 E1               [12]  467 	pop	hl
+    00000287 11r51r03         [12]  468 	ld	de, #___str_12
+    0000028A D5               [16]  469 	push	de
+    0000028B CDr00r00         [24]  470 	call	_gprintf
+    0000028E E1               [12]  471 	pop	hl
+                                    472 ;src\battle.c:100: gotogxy(  0 , 17 ); gprintf( " " );     gotogxy( 10 , 17 ); gprintf( " " );
+    0000028F 21 00 11         [12]  473 	ld	hl, #0x1100
+    00000292 E5               [16]  474 	push	hl
+    00000293 CDr00r00         [24]  475 	call	_gotogxy
+    00000296 E1               [12]  476 	pop	hl
+    00000297 11r53r03         [12]  477 	ld	de, #___str_13
+    0000029A D5               [16]  478 	push	de
+    0000029B CDr00r00         [24]  479 	call	_gprintf
+    0000029E E1               [12]  480 	pop	hl
+    0000029F 21 0A 11         [12]  481 	ld	hl, #0x110a
+    000002A2 E5               [16]  482 	push	hl
+    000002A3 CDr00r00         [24]  483 	call	_gotogxy
+    000002A6 E1               [12]  484 	pop	hl
+    000002A7 11r53r03         [12]  485 	ld	de, #___str_13
+    000002AA D5               [16]  486 	push	de
+    000002AB CDr00r00         [24]  487 	call	_gprintf
+    000002AE E1               [12]  488 	pop	hl
+                                    489 ;src\battle.c:101: break;
+    000002AF C3r34r03         [16]  490 	jp	00106$
+                                    491 ;src\battle.c:103: case 3 : 
+    000002B2                        492 00103$:
+                                    493 ;src\battle.c:104: gotogxy(  0 , 16 ); gprintf( " " );     gotogxy( 10 , 16 ); gprintf( " " );
+    000002B2 21 00 10         [12]  494 	ld	hl, #0x1000
+    000002B5 E5               [16]  495 	push	hl
+    000002B6 CDr00r00         [24]  496 	call	_gotogxy
+    000002B9 E1               [12]  497 	pop	hl
+    000002BA 11r53r03         [12]  498 	ld	de, #___str_13
+    000002BD D5               [16]  499 	push	de
+    000002BE CDr00r00         [24]  500 	call	_gprintf
+    000002C1 E1               [12]  501 	pop	hl
+    000002C2 21 0A 10         [12]  502 	ld	hl, #0x100a
+    000002C5 E5               [16]  503 	push	hl
+    000002C6 CDr00r00         [24]  504 	call	_gotogxy
+    000002C9 E1               [12]  505 	pop	hl
+    000002CA 11r53r03         [12]  506 	ld	de, #___str_13
+    000002CD D5               [16]  507 	push	de
+    000002CE CDr00r00         [24]  508 	call	_gprintf
+    000002D1 E1               [12]  509 	pop	hl
+                                    510 ;src\battle.c:105: gotogxy(  0 , 17 ); gprintf( ">" );     gotogxy( 10 , 17 ); gprintf( " " );
+    000002D2 21 00 11         [12]  511 	ld	hl, #0x1100
+    000002D5 E5               [16]  512 	push	hl
+    000002D6 CDr00r00         [24]  513 	call	_gotogxy
+    000002D9 E1               [12]  514 	pop	hl
+    000002DA 11r51r03         [12]  515 	ld	de, #___str_12
+    000002DD D5               [16]  516 	push	de
+    000002DE CDr00r00         [24]  517 	call	_gprintf
+    000002E1 E1               [12]  518 	pop	hl
+    000002E2 21 0A 11         [12]  519 	ld	hl, #0x110a
+    000002E5 E5               [16]  520 	push	hl
+    000002E6 CDr00r00         [24]  521 	call	_gotogxy
+    000002E9 E1               [12]  522 	pop	hl
+    000002EA 11r53r03         [12]  523 	ld	de, #___str_13
+    000002ED D5               [16]  524 	push	de
+    000002EE CDr00r00         [24]  525 	call	_gprintf
+    000002F1 E1               [12]  526 	pop	hl
+                                    527 ;src\battle.c:106: break;
+    000002F2 18 40            [12]  528 	jr	00106$
+                                    529 ;src\battle.c:107: case 4 : 
+    000002F4                        530 00104$:
+                                    531 ;src\battle.c:108: gotogxy(  0 , 16 ); gprintf( " " );     gotogxy( 10 , 16 ); gprintf( " " );
+    000002F4 21 00 10         [12]  532 	ld	hl, #0x1000
+    000002F7 E5               [16]  533 	push	hl
+    000002F8 CDr00r00         [24]  534 	call	_gotogxy
+    000002FB E1               [12]  535 	pop	hl
+    000002FC 11r53r03         [12]  536 	ld	de, #___str_13
+    000002FF D5               [16]  537 	push	de
+    00000300 CDr00r00         [24]  538 	call	_gprintf
+    00000303 E1               [12]  539 	pop	hl
+    00000304 21 0A 10         [12]  540 	ld	hl, #0x100a
+    00000307 E5               [16]  541 	push	hl
+    00000308 CDr00r00         [24]  542 	call	_gotogxy
+    0000030B E1               [12]  543 	pop	hl
+    0000030C 11r53r03         [12]  544 	ld	de, #___str_13
+    0000030F D5               [16]  545 	push	de
+    00000310 CDr00r00         [24]  546 	call	_gprintf
+    00000313 E1               [12]  547 	pop	hl
+                                    548 ;src\battle.c:109: gotogxy(  0 , 17 ); gprintf( " " );     gotogxy( 10 , 17 ); gprintf( ">" );
+    00000314 21 00 11         [12]  549 	ld	hl, #0x1100
+    00000317 E5               [16]  550 	push	hl
+    00000318 CDr00r00         [24]  551 	call	_gotogxy
+    0000031B E1               [12]  552 	pop	hl
+    0000031C 11r53r03         [12]  553 	ld	de, #___str_13
+    0000031F D5               [16]  554 	push	de
+    00000320 CDr00r00         [24]  555 	call	_gprintf
+    00000323 E1               [12]  556 	pop	hl
+    00000324 21 0A 11         [12]  557 	ld	hl, #0x110a
+    00000327 E5               [16]  558 	push	hl
+    00000328 CDr00r00         [24]  559 	call	_gotogxy
+    0000032B E1               [12]  560 	pop	hl
+    0000032C 11r51r03         [12]  561 	ld	de, #___str_12
+    0000032F D5               [16]  562 	push	de
+    00000330 CDr00r00         [24]  563 	call	_gprintf
+    00000333 E1               [12]  564 	pop	hl
+                                    565 ;src\battle.c:111: }
+    00000334                        566 00106$:
+                                    567 ;src\battle.c:112: }
+    00000334 33               [ 8]  568 	inc	sp
+    00000335 C9               [16]  569 	ret
+    00000336                        570 ___str_8:
+    00000336 41 74 74 61 63 6B      571 	.ascii "Attack"
+    0000033C 00                     572 	.db 0x00
+    0000033D                        573 ___str_9:
+    0000033D 49 74 65 6D            574 	.ascii "Item"
+    00000341 00                     575 	.db 0x00
+    00000342                        576 ___str_10:
+    00000342 53 70 65 63 69 61 6C   577 	.ascii "Special"
+    00000349 00                     578 	.db 0x00
+    0000034A                        579 ___str_11:
+    0000034A 45 73 63 61 70 65      580 	.ascii "Escape"
+    00000350 00                     581 	.db 0x00
+    00000351                        582 ___str_12:
+    00000351 3E                     583 	.ascii ">"
+    00000352 00                     584 	.db 0x00
+    00000353                        585 ___str_13:
+    00000353 20                     586 	.ascii " "
+    00000354 00                     587 	.db 0x00
+                                    588 ;src\battle.c:114: void battle( Player * player , Enemy * enemy) { 
+                                    589 ;	---------------------------------
+                                    590 ; Function battle
+                                    591 ; ---------------------------------
+    00000355                        592 _battle::
+    00000355 E8 E9            [16]  593 	add	sp, #-23
+    00000357 F8 15            [12]  594 	ldhl	sp,	#21
+    00000359 7B               [ 4]  595 	ld	a, e
+    0000035A 22               [ 8]  596 	ld	(hl+), a
+    0000035B 72               [ 8]  597 	ld	(hl), d
+    0000035C F8 13            [12]  598 	ldhl	sp,	#19
+    0000035E 79               [ 4]  599 	ld	a, c
+    0000035F 22               [ 8]  600 	ld	(hl+), a
+    00000360 70               [ 8]  601 	ld	(hl), b
+                                    602 ;src\battle.c:115: HIDE_SPRITES;
+    00000361 F0r00            [12]  603 	ldh	a, (_LCDC_REG + 0)
+    00000363 E6 FD            [ 8]  604 	and	a, #0xfd
+    00000365 E0r00            [12]  605 	ldh	(_LCDC_REG + 0), a
+                                    606 ;src\battle.c:116: uint8_t     state       = 1;
+    00000367 F8 10            [12]  607 	ldhl	sp,	#16
+    00000369 36 01            [12]  608 	ld	(hl), #0x01
+                                    609 ;src\battle.c:117: uint8_t     selection   = 1;
+    0000036B F8 00            [12]  610 	ldhl	sp,	#0
+    0000036D 36 01            [12]  611 	ld	(hl), #0x01
+                                    612 ;src\battle.c:119: battleClear();
+    0000036F CDrA6r01         [24]  613 	call	_battleClear
+                                    614 ;src\battle.c:120: enemyAppears(enemy -> name);
+    00000372 F8 13            [12]  615 	ldhl	sp,	#19
+    00000374 2A               [ 8]  616 	ld	a, (hl+)
+    00000375 5F               [ 4]  617 	ld	e, a
+    00000376 56               [ 8]  618 	ld	d, (hl)
+    00000377 CDr00r00         [24]  619 	call	_enemyAppears
+                                    620 ;src\battle.c:122: while ( 1) {
+    0000037A F8 15            [12]  621 	ldhl	sp,#21
+    0000037C 2A               [ 8]  622 	ld	a, (hl+)
+    0000037D 5F               [ 4]  623 	ld	e, a
+    0000037E 56               [ 8]  624 	ld	d, (hl)
+    0000037F 21 08 00         [12]  625 	ld	hl, #0x0008
+    00000382 19               [ 8]  626 	add	hl, de
+    00000383 E5               [16]  627 	push	hl
+    00000384 7D               [ 4]  628 	ld	a, l
+    00000385 F8 03            [12]  629 	ldhl	sp,	#3
+    00000387 77               [ 8]  630 	ld	(hl), a
+    00000388 E1               [12]  631 	pop	hl
+    00000389 7C               [ 4]  632 	ld	a, h
+    0000038A F8 02            [12]  633 	ldhl	sp,	#2
+    0000038C 77               [ 8]  634 	ld	(hl), a
+    0000038D F8 13            [12]  635 	ldhl	sp,#19
+    0000038F 2A               [ 8]  636 	ld	a, (hl+)
+    00000390 5F               [ 4]  637 	ld	e, a
+    00000391 56               [ 8]  638 	ld	d, (hl)
+    00000392 21 06 00         [12]  639 	ld	hl, #0x0006
+    00000395 19               [ 8]  640 	add	hl, de
+    00000396 E5               [16]  641 	push	hl
+    00000397 7D               [ 4]  642 	ld	a, l
+    00000398 F8 05            [12]  643 	ldhl	sp,	#5
+    0000039A 77               [ 8]  644 	ld	(hl), a
+    0000039B E1               [12]  645 	pop	hl
+    0000039C 7C               [ 4]  646 	ld	a, h
+    0000039D F8 04            [12]  647 	ldhl	sp,	#4
+    0000039F 32               [ 8]  648 	ld	(hl-), a
+    000003A0 2A               [ 8]  649 	ld	a, (hl+)
+    000003A1 23               [ 8]  650 	inc	hl
+    000003A2 32               [ 8]  651 	ld	(hl-), a
+    000003A3 2A               [ 8]  652 	ld	a, (hl+)
+    000003A4 23               [ 8]  653 	inc	hl
+    000003A5 77               [ 8]  654 	ld	(hl), a
+    000003A6 F8 15            [12]  655 	ldhl	sp,#21
+    000003A8 2A               [ 8]  656 	ld	a, (hl+)
+    000003A9 5F               [ 4]  657 	ld	e, a
+    000003AA 56               [ 8]  658 	ld	d, (hl)
+    000003AB 21 05 00         [12]  659 	ld	hl, #0x0005
+    000003AE 19               [ 8]  660 	add	hl, de
+    000003AF E5               [16]  661 	push	hl
+    000003B0 7D               [ 4]  662 	ld	a, l
+    000003B1 F8 09            [12]  663 	ldhl	sp,	#9
+    000003B3 77               [ 8]  664 	ld	(hl), a
+    000003B4 E1               [12]  665 	pop	hl
+    000003B5 7C               [ 4]  666 	ld	a, h
+    000003B6 F8 08            [12]  667 	ldhl	sp,	#8
+    000003B8 77               [ 8]  668 	ld	(hl), a
+    000003B9 F8 13            [12]  669 	ldhl	sp,#19
+    000003BB 2A               [ 8]  670 	ld	a, (hl+)
+    000003BC 5F               [ 4]  671 	ld	e, a
+    000003BD 56               [ 8]  672 	ld	d, (hl)
+    000003BE 21 0B 00         [12]  673 	ld	hl, #0x000b
+    000003C1 19               [ 8]  674 	add	hl, de
+    000003C2 E5               [16]  675 	push	hl
+    000003C3 7D               [ 4]  676 	ld	a, l
+    000003C4 F8 0B            [12]  677 	ldhl	sp,	#11
+    000003C6 77               [ 8]  678 	ld	(hl), a
+    000003C7 E1               [12]  679 	pop	hl
+    000003C8 7C               [ 4]  680 	ld	a, h
+    000003C9 F8 0A            [12]  681 	ldhl	sp,	#10
+    000003CB 32               [ 8]  682 	ld	(hl-), a
+    000003CC 2A               [ 8]  683 	ld	a, (hl+)
+    000003CD 23               [ 8]  684 	inc	hl
+    000003CE 32               [ 8]  685 	ld	(hl-), a
+    000003CF 2A               [ 8]  686 	ld	a, (hl+)
+    000003D0 23               [ 8]  687 	inc	hl
+    000003D1 77               [ 8]  688 	ld	(hl), a
+    000003D2                        689 00132$:
+                                    690 ;src\battle.c:124: if (state == 1 ) { // Player Turn
+    000003D2 F8 10            [12]  691 	ldhl	sp,	#16
+    000003D4 7E               [ 8]  692 	ld	a, (hl)
+    000003D5 3D               [ 4]  693 	dec	a
+    000003D6 C2r4Cr05         [16]  694 	jp	NZ,00128$
+                                    695 ;src\battle.c:126: battleWindowUpdate( player -> player_hp );
+    000003D9 F8 07            [12]  696 	ldhl	sp,#7
+    000003DB 2A               [ 8]  697 	ld	a, (hl+)
+    000003DC 5F               [ 4]  698 	ld	e, a
+    000003DD 56               [ 8]  699 	ld	d, (hl)
+    000003DE 1A               [ 8]  700 	ld	a, (de)
+    000003DF F8 11            [12]  701 	ldhl	sp,	#17
+    000003E1 22               [ 8]  702 	ld	(hl+), a
+    000003E2 13               [ 8]  703 	inc	de
+    000003E3 1A               [ 8]  704 	ld	a, (de)
+    000003E4 32               [ 8]  705 	ld	(hl-), a
+    000003E5 2A               [ 8]  706 	ld	a, (hl+)
+    000003E6 5F               [ 4]  707 	ld	e, a
+    000003E7 56               [ 8]  708 	ld	d, (hl)
+    000003E8 CDr00r00         [24]  709 	call	_battleWindowUpdate
+                                    710 ;src\battle.c:127: inputSelection(selection);        
+    000003EB F8 00            [12]  711 	ldhl	sp,	#0
+    000003ED 7E               [ 8]  712 	ld	a, (hl)
+    000003EE CDrC8r01         [24]  713 	call	_inputSelection
+                                    714 ;src\battle.c:128: gotogxy( 1 , 1); gprintf("%d", enemy -> hp);
+    000003F1 21 01 01         [12]  715 	ld	hl, #0x101
+    000003F4 E5               [16]  716 	push	hl
+    000003F5 CDr00r00         [24]  717 	call	_gotogxy
+    000003F8 E1               [12]  718 	pop	hl
+    000003F9 F8 03            [12]  719 	ldhl	sp,#3
+    000003FB 2A               [ 8]  720 	ld	a, (hl+)
+    000003FC 5F               [ 4]  721 	ld	e, a
+    000003FD 56               [ 8]  722 	ld	d, (hl)
+    000003FE 1A               [ 8]  723 	ld	a, (de)
+    000003FF 4F               [ 4]  724 	ld	c, a
+    00000400 13               [ 8]  725 	inc	de
+    00000401 1A               [ 8]  726 	ld	a, (de)
+    00000402 47               [ 4]  727 	ld	b, a
+    00000403 C5               [16]  728 	push	bc
+    00000404 11rB1r05         [12]  729 	ld	de, #___str_14
+    00000407 D5               [16]  730 	push	de
+    00000408 CDr00r00         [24]  731 	call	_gprintf
+    0000040B E8 04            [16]  732 	add	sp, #4
+                                    733 ;src\battle.c:130: switch ( selection ) {
+    0000040D F8 00            [12]  734 	ldhl	sp,	#0
+    0000040F 7E               [ 8]  735 	ld	a, (hl)
+    00000410 3D               [ 4]  736 	dec	a
+    00000411 28 1B            [12]  737 	jr	Z, 00101$
+    00000413 F8 00            [12]  738 	ldhl	sp,	#0
+    00000415 7E               [ 8]  739 	ld	a, (hl)
+    00000416 D6 02            [ 8]  740 	sub	a, #0x02
+    00000418 CAr07r05         [16]  741 	jp	Z,00111$
+    0000041B F8 00            [12]  742 	ldhl	sp,	#0
+    0000041D 7E               [ 8]  743 	ld	a, (hl)
+    0000041E D6 03            [ 8]  744 	sub	a, #0x03
+    00000420 CAr1Fr05         [16]  745 	jp	Z,00116$
+    00000423 F8 00            [12]  746 	ldhl	sp,	#0
+    00000425 7E               [ 8]  747 	ld	a, (hl)
+    00000426 D6 04            [ 8]  748 	sub	a, #0x04
+    00000428 CAr36r05         [16]  749 	jp	Z,00121$
+    0000042B C3r4Cr05         [16]  750 	jp	00128$
+                                    751 ;src\battle.c:131: case 1: // Attack          
+    0000042E                        752 00101$:
+                                    753 ;src\battle.c:132: if (joypad() & J_RIGHT  ) { selection = 2; }
+    0000042E CDr00r00         [24]  754 	call	_joypad
+    00000431 0F               [ 4]  755 	rrca
+    00000432 30 04            [12]  756 	jr	NC, 00103$
+    00000434 F8 00            [12]  757 	ldhl	sp,	#0
+    00000436 36 02            [12]  758 	ld	(hl), #0x02
+    00000438                        759 00103$:
+                                    760 ;src\battle.c:133: if (joypad() & J_DOWN   ) { selection = 3; }
+    00000438 CDr00r00         [24]  761 	call	_joypad
+    0000043B CB 5F            [ 8]  762 	bit	3, a
+    0000043D 28 04            [12]  763 	jr	Z, 00105$
+    0000043F F8 00            [12]  764 	ldhl	sp,	#0
+    00000441 36 03            [12]  765 	ld	(hl), #0x03
+    00000443                        766 00105$:
+                                    767 ;src\battle.c:135: if ( joypad() & J_A ) {
+    00000443 CDr00r00         [24]  768 	call	_joypad
+    00000446 CB 67            [ 8]  769 	bit	4, a
+    00000448 CAr4Cr05         [16]  770 	jp	Z,00128$
+                                    771 ;src\battle.c:136: enemy -> hp = enemyHit(enemy -> name, enemy -> hp, player -> player_atk);
+    0000044B F8 01            [12]  772 	ldhl	sp,#1
+    0000044D 2A               [ 8]  773 	ld	a, (hl+)
+    0000044E 5F               [ 4]  774 	ld	e, a
+    0000044F 2A               [ 8]  775 	ld	a, (hl+)
+    00000450 57               [ 4]  776 	ld	d, a
+    00000451 1A               [ 8]  777 	ld	a, (de)
+    00000452 47               [ 4]  778 	ld	b, a
+    00000453 2A               [ 8]  779 	ld	a, (hl+)
+    00000454 5F               [ 4]  780 	ld	e, a
+    00000455 56               [ 8]  781 	ld	d, (hl)
+    00000456 1A               [ 8]  782 	ld	a, (de)
+    00000457 4F               [ 4]  783 	ld	c, a
+    00000458 13               [ 8]  784 	inc	de
+    00000459 1A               [ 8]  785 	ld	a, (de)
+    0000045A 6F               [ 4]  786 	ld	l, a
+                                    787 ;	spillPairReg hl
+                                    788 ;	spillPairReg hl
+    0000045B C5               [16]  789 	push	bc
+    0000045C 45               [ 4]  790 	ld	b, l
+    0000045D 33               [ 8]  791 	inc	sp
+    0000045E F8 14            [12]  792 	ldhl	sp,	#20
+    00000460 2A               [ 8]  793 	ld	a, (hl+)
+    00000461 5F               [ 4]  794 	ld	e, a
+    00000462 56               [ 8]  795 	ld	d, (hl)
+    00000463 CDr43r00         [24]  796 	call	_enemyHit
+    00000466 F8 03            [12]  797 	ldhl	sp,	#3
+    00000468 2A               [ 8]  798 	ld	a,	(hl+)
+    00000469 66               [ 8]  799 	ld	h, (hl)
+    0000046A 6F               [ 4]  800 	ld	l, a
+    0000046B 79               [ 4]  801 	ld	a, c
+    0000046C 22               [ 8]  802 	ld	(hl+), a
+    0000046D 70               [ 8]  803 	ld	(hl), b
+                                    804 ;src\battle.c:137: if ( enemy -> hp < 1 )  { 
+    0000046E F8 05            [12]  805 	ldhl	sp,#5
+    00000470 2A               [ 8]  806 	ld	a, (hl+)
+    00000471 5F               [ 4]  807 	ld	e, a
+    00000472 56               [ 8]  808 	ld	d, (hl)
+    00000473 1A               [ 8]  809 	ld	a, (de)
+    00000474 4F               [ 4]  810 	ld	c, a
+    00000475 13               [ 8]  811 	inc	de
+    00000476 1A               [ 8]  812 	ld	a, (de)
+    00000477 47               [ 4]  813 	ld	b, a
+    00000478 79               [ 4]  814 	ld	a, c
+    00000479 D6 01            [ 8]  815 	sub	a, #0x01
+    0000047B 78               [ 4]  816 	ld	a, b
+    0000047C DE 00            [ 8]  817 	sbc	a, #0x00
+    0000047E D2r01r05         [16]  818 	jp	NC, 00107$
+                                    819 ;src\battle.c:138: victory(enemy -> name , enemy -> xp );
+    00000481 F8 13            [12]  820 	ldhl	sp,#19
+    00000483 2A               [ 8]  821 	ld	a, (hl+)
+    00000484 5F               [ 4]  822 	ld	e, a
+    00000485 56               [ 8]  823 	ld	d, (hl)
+    00000486 21 0D 00         [12]  824 	ld	hl, #0x000d
+    00000489 19               [ 8]  825 	add	hl, de
+    0000048A E5               [16]  826 	push	hl
+    0000048B 7D               [ 4]  827 	ld	a, l
+    0000048C F8 13            [12]  828 	ldhl	sp,	#19
+    0000048E 77               [ 8]  829 	ld	(hl), a
+    0000048F E1               [12]  830 	pop	hl
+    00000490 7C               [ 4]  831 	ld	a, h
+    00000491 F8 12            [12]  832 	ldhl	sp,	#18
+    00000493 32               [ 8]  833 	ld	(hl-), a
+    00000494 2A               [ 8]  834 	ld	a, (hl+)
+    00000495 5F               [ 4]  835 	ld	e, a
+    00000496 2A               [ 8]  836 	ld	a, (hl+)
+    00000497 57               [ 4]  837 	ld	d, a
+    00000498 1A               [ 8]  838 	ld	a, (de)
+    00000499 5E               [ 8]  839 	ld	e, (hl)
+    0000049A 23               [ 8]  840 	inc	hl
+    0000049B 56               [ 8]  841 	ld	d, (hl)
+    0000049C CDr3Dr01         [24]  842 	call	_victory
+                                    843 ;src\battle.c:139: player -> xp        += enemy -> xp;
+    0000049F F8 15            [12]  844 	ldhl	sp,#21
+    000004A1 2A               [ 8]  845 	ld	a, (hl+)
+    000004A2 5F               [ 4]  846 	ld	e, a
+    000004A3 56               [ 8]  847 	ld	d, (hl)
+    000004A4 21 0A 00         [12]  848 	ld	hl, #0x000a
+    000004A7 19               [ 8]  849 	add	hl, de
+    000004A8 E5               [16]  850 	push	hl
+    000004A9 7D               [ 4]  851 	ld	a, l
+    000004AA F8 0D            [12]  852 	ldhl	sp,	#13
+    000004AC 77               [ 8]  853 	ld	(hl), a
+    000004AD E1               [12]  854 	pop	hl
+    000004AE 7C               [ 4]  855 	ld	a, h
+    000004AF F8 0C            [12]  856 	ldhl	sp,	#12
+    000004B1 32               [ 8]  857 	ld	(hl-), a
+    000004B2 2A               [ 8]  858 	ld	a, (hl+)
+    000004B3 5F               [ 4]  859 	ld	e, a
+    000004B4 2A               [ 8]  860 	ld	a, (hl+)
+    000004B5 57               [ 4]  861 	ld	d, a
+    000004B6 1A               [ 8]  862 	ld	a, (de)
+    000004B7 22               [ 8]  863 	ld	(hl+), a
+    000004B8 13               [ 8]  864 	inc	de
+    000004B9 1A               [ 8]  865 	ld	a, (de)
+    000004BA 77               [ 8]  866 	ld	(hl), a
+    000004BB F8 11            [12]  867 	ldhl	sp,#17
+    000004BD 2A               [ 8]  868 	ld	a, (hl+)
+    000004BE 5F               [ 4]  869 	ld	e, a
+    000004BF 56               [ 8]  870 	ld	d, (hl)
+    000004C0 1A               [ 8]  871 	ld	a, (de)
+    000004C1 F8 0F            [12]  872 	ldhl	sp,	#15
+    000004C3 22               [ 8]  873 	ld	(hl+), a
+    000004C4 13               [ 8]  874 	inc	de
+    000004C5 1A               [ 8]  875 	ld	a, (de)
+    000004C6 32               [ 8]  876 	ld	(hl-), a
+    000004C7 2A               [ 8]  877 	ld	a, (hl+)
+    000004C8 5F               [ 4]  878 	ld	e, a
+    000004C9 56               [ 8]  879 	ld	d, (hl)
+    000004CA F8 0D            [12]  880 	ldhl	sp,	#13
+    000004CC 2A               [ 8]  881 	ld	a,	(hl+)
+    000004CD 66               [ 8]  882 	ld	h, (hl)
+    000004CE 6F               [ 4]  883 	ld	l, a
+    000004CF 19               [ 8]  884 	add	hl, de
+    000004D0 E5               [16]  885 	push	hl
+    000004D1 7D               [ 4]  886 	ld	a, l
+    000004D2 F8 13            [12]  887 	ldhl	sp,	#19
+    000004D4 77               [ 8]  888 	ld	(hl), a
+    000004D5 E1               [12]  889 	pop	hl
+    000004D6 7C               [ 4]  890 	ld	a, h
+    000004D7 F8 12            [12]  891 	ldhl	sp,	#18
+    000004D9 77               [ 8]  892 	ld	(hl), a
+    000004DA F8 0B            [12]  893 	ldhl	sp,#11
+    000004DC 2A               [ 8]  894 	ld	a, (hl+)
+    000004DD 5F               [ 4]  895 	ld	e, a
+    000004DE 56               [ 8]  896 	ld	d, (hl)
+    000004DF F8 11            [12]  897 	ldhl	sp,	#17
+    000004E1 2A               [ 8]  898 	ld	a, (hl+)
+    000004E2 12               [ 8]  899 	ld	(de), a
+    000004E3 13               [ 8]  900 	inc	de
+    000004E4 7E               [ 8]  901 	ld	a, (hl)
+    000004E5 12               [ 8]  902 	ld	(de), a
+                                    903 ;src\battle.c:140: player -> steps     = 0;
+    000004E6 F8 15            [12]  904 	ldhl	sp,#21
+    000004E8 2A               [ 8]  905 	ld	a, (hl+)
+    000004E9 5F               [ 4]  906 	ld	e, a
+    000004EA 56               [ 8]  907 	ld	d, (hl)
+    000004EB 21 11 00         [12]  908 	ld	hl, #0x0011
+    000004EE 19               [ 8]  909 	add	hl, de
+    000004EF E5               [16]  910 	push	hl
+    000004F0 7D               [ 4]  911 	ld	a, l
+    000004F1 F8 13            [12]  912 	ldhl	sp,	#19
+    000004F3 77               [ 8]  913 	ld	(hl), a
+    000004F4 E1               [12]  914 	pop	hl
+    000004F5 7C               [ 4]  915 	ld	a, h
+    000004F6 F8 12            [12]  916 	ldhl	sp,	#18
+    000004F8 32               [ 8]  917 	ld	(hl-), a
+    000004F9 2A               [ 8]  918 	ld	a,	(hl+)
+    000004FA 66               [ 8]  919 	ld	h, (hl)
+    000004FB 6F               [ 4]  920 	ld	l, a
+    000004FC 36 00            [12]  921 	ld	(hl), #0x00
+                                    922 ;src\battle.c:141: return;
+    000004FE C3rAEr05         [16]  923 	jp	00134$
+    00000501                        924 00107$:
+                                    925 ;src\battle.c:143: else                    { state = 2;}
+    00000501 F8 10            [12]  926 	ldhl	sp,	#16
+    00000503 36 02            [12]  927 	ld	(hl), #0x02
+                                    928 ;src\battle.c:145: break;
+    00000505 18 45            [12]  929 	jr	00128$
+                                    930 ;src\battle.c:147: case 2: // Item
+    00000507                        931 00111$:
+                                    932 ;src\battle.c:148: if ( joypad() & J_LEFT  ) { selection = 1; }
+    00000507 CDr00r00         [24]  933 	call	_joypad
+    0000050A CB 4F            [ 8]  934 	bit	1, a
+    0000050C 28 04            [12]  935 	jr	Z, 00113$
+    0000050E F8 00            [12]  936 	ldhl	sp,	#0
+    00000510 36 01            [12]  937 	ld	(hl), #0x01
+    00000512                        938 00113$:
+                                    939 ;src\battle.c:149: if ( joypad() & J_DOWN  ) { selection = 4; }
+    00000512 CDr00r00         [24]  940 	call	_joypad
+    00000515 CB 5F            [ 8]  941 	bit	3, a
+    00000517 28 33            [12]  942 	jr	Z, 00128$
+    00000519 F8 00            [12]  943 	ldhl	sp,	#0
+    0000051B 36 04            [12]  944 	ld	(hl), #0x04
+                                    945 ;src\battle.c:150: break;
+    0000051D 18 2D            [12]  946 	jr	00128$
+                                    947 ;src\battle.c:152: case 3: // Special            
+    0000051F                        948 00116$:
+                                    949 ;src\battle.c:153: if ( joypad() & J_UP    ) { selection = 1; }
+    0000051F CDr00r00         [24]  950 	call	_joypad
+    00000522 CB 57            [ 8]  951 	bit	2, a
+    00000524 28 04            [12]  952 	jr	Z, 00118$
+    00000526 F8 00            [12]  953 	ldhl	sp,	#0
+    00000528 36 01            [12]  954 	ld	(hl), #0x01
+    0000052A                        955 00118$:
+                                    956 ;src\battle.c:154: if ( joypad() & J_RIGHT ) { selection = 4; }
+    0000052A CDr00r00         [24]  957 	call	_joypad
+    0000052D 0F               [ 4]  958 	rrca
+    0000052E 30 1C            [12]  959 	jr	NC, 00128$
+    00000530 F8 00            [12]  960 	ldhl	sp,	#0
+    00000532 36 04            [12]  961 	ld	(hl), #0x04
+                                    962 ;src\battle.c:155: break;
+    00000534 18 16            [12]  963 	jr	00128$
+                                    964 ;src\battle.c:157: case 4: // Escape
+    00000536                        965 00121$:
+                                    966 ;src\battle.c:158: if ( joypad() & J_UP    ) { selection = 2; }
+    00000536 CDr00r00         [24]  967 	call	_joypad
+    00000539 CB 57            [ 8]  968 	bit	2, a
+    0000053B 28 04            [12]  969 	jr	Z, 00123$
+    0000053D F8 00            [12]  970 	ldhl	sp,	#0
+    0000053F 36 02            [12]  971 	ld	(hl), #0x02
+    00000541                        972 00123$:
+                                    973 ;src\battle.c:159: if ( joypad() & J_LEFT  ) { selection = 3; }
+    00000541 CDr00r00         [24]  974 	call	_joypad
+    00000544 CB 4F            [ 8]  975 	bit	1, a
+    00000546 28 04            [12]  976 	jr	Z, 00128$
+    00000548 F8 00            [12]  977 	ldhl	sp,	#0
+    0000054A 36 03            [12]  978 	ld	(hl), #0x03
+                                    979 ;src\battle.c:161: }
+    0000054C                        980 00128$:
+                                    981 ;src\battle.c:164: if ( state == 2 ) {
+    0000054C F8 10            [12]  982 	ldhl	sp,	#16
+    0000054E 7E               [ 8]  983 	ld	a, (hl)
+    0000054F D6 02            [ 8]  984 	sub	a, #0x02
+    00000551 C2rD2r03         [16]  985 	jp	NZ,00132$
+                                    986 ;src\battle.c:165: enemyAttacks( enemy -> name , enemy -> attack );
+    00000554 F8 09            [12]  987 	ldhl	sp,#9
+    00000556 2A               [ 8]  988 	ld	a, (hl+)
+    00000557 5F               [ 4]  989 	ld	e, a
+    00000558 56               [ 8]  990 	ld	d, (hl)
+    00000559 1A               [ 8]  991 	ld	a, (de)
+    0000055A F8 13            [12]  992 	ldhl	sp,	#19
+    0000055C 5E               [ 8]  993 	ld	e, (hl)
+    0000055D 23               [ 8]  994 	inc	hl
+    0000055E 56               [ 8]  995 	ld	d, (hl)
+    0000055F CDrD9r00         [24]  996 	call	_enemyAttacks
+                                    997 ;src\battle.c:166: player -> player_hp -= enemy -> attack;
+    00000562 F8 07            [12]  998 	ldhl	sp,#7
+    00000564 2A               [ 8]  999 	ld	a, (hl+)
+    00000565 5F               [ 4] 1000 	ld	e, a
+    00000566 56               [ 8] 1001 	ld	d, (hl)
+    00000567 1A               [ 8] 1002 	ld	a, (de)
+    00000568 F8 10            [12] 1003 	ldhl	sp,	#16
+    0000056A 22               [ 8] 1004 	ld	(hl+), a
+    0000056B 13               [ 8] 1005 	inc	de
+    0000056C 1A               [ 8] 1006 	ld	a, (de)
+    0000056D 77               [ 8] 1007 	ld	(hl), a
+    0000056E F8 0B            [12] 1008 	ldhl	sp,#11
+    00000570 2A               [ 8] 1009 	ld	a, (hl+)
+    00000571 5F               [ 4] 1010 	ld	e, a
+    00000572 56               [ 8] 1011 	ld	d, (hl)
+    00000573 1A               [ 8] 1012 	ld	a, (de)
+    00000574 F8 12            [12] 1013 	ldhl	sp,	#18
+    00000576 32               [ 8] 1014 	ld	(hl-), a
+    00000577 2B               [ 8] 1015 	dec	hl
+    00000578 7E               [ 8] 1016 	ld	a, (hl)
+    00000579 F8 0D            [12] 1017 	ldhl	sp,	#13
+    0000057B 77               [ 8] 1018 	ld	(hl), a
+    0000057C F8 11            [12] 1019 	ldhl	sp,	#17
+    0000057E 7E               [ 8] 1020 	ld	a, (hl)
+    0000057F F8 0E            [12] 1021 	ldhl	sp,	#14
+    00000581 77               [ 8] 1022 	ld	(hl), a
+    00000582 F8 12            [12] 1023 	ldhl	sp,	#18
+    00000584 7E               [ 8] 1024 	ld	a, (hl)
+    00000585 F8 0F            [12] 1025 	ldhl	sp,	#15
+    00000587 22               [ 8] 1026 	ld	(hl+), a
+    00000588 AF               [ 4] 1027 	xor	a, a
+    00000589 32               [ 8] 1028 	ld	(hl-), a
+    0000058A 2B               [ 8] 1029 	dec	hl
+    0000058B 2B               [ 8] 1030 	dec	hl
+    0000058C 2A               [ 8] 1031 	ld	a, (hl+)
+    0000058D 5F               [ 4] 1032 	ld	e, a
+    0000058E 2A               [ 8] 1033 	ld	a, (hl+)
+    0000058F 57               [ 4] 1034 	ld	d, a
+    00000590 2A               [ 8] 1035 	ld	a,	(hl+)
+    00000591 66               [ 8] 1036 	ld	h, (hl)
+    00000592 6F               [ 4] 1037 	ld	l, a
+    00000593 7B               [ 4] 1038 	ld	a, e
+    00000594 95               [ 4] 1039 	sub	a, l
+    00000595 5F               [ 4] 1040 	ld	e, a
+    00000596 7A               [ 4] 1041 	ld	a, d
+    00000597 9C               [ 4] 1042 	sbc	a, h
+    00000598 F8 12            [12] 1043 	ldhl	sp,	#18
+    0000059A 32               [ 8] 1044 	ld	(hl-), a
+    0000059B 73               [ 8] 1045 	ld	(hl), e
+    0000059C F8 07            [12] 1046 	ldhl	sp,#7
+    0000059E 2A               [ 8] 1047 	ld	a, (hl+)
+    0000059F 5F               [ 4] 1048 	ld	e, a
+    000005A0 56               [ 8] 1049 	ld	d, (hl)
+    000005A1 F8 11            [12] 1050 	ldhl	sp,	#17
+    000005A3 2A               [ 8] 1051 	ld	a, (hl+)
+    000005A4 12               [ 8] 1052 	ld	(de), a
+    000005A5 13               [ 8] 1053 	inc	de
+                                   1054 ;src\battle.c:167: state = 1;
+    000005A6 3A               [ 8] 1055 	ld	a, (hl-)
+    000005A7 2B               [ 8] 1056 	dec	hl
+    000005A8 12               [ 8] 1057 	ld	(de), a
+    000005A9 36 01            [12] 1058 	ld	(hl), #0x01
+    000005AB C3rD2r03         [16] 1059 	jp	00132$
+    000005AE                       1060 00134$:
+                                   1061 ;src\battle.c:174: }
+    000005AE E8 17            [16] 1062 	add	sp, #23
+    000005B0 C9               [16] 1063 	ret
+    000005B1                       1064 ___str_14:
+    000005B1 25 64                 1065 	.ascii "%d"
+    000005B3 00                    1066 	.db 0x00
+                                   1067 	.area _CODE
+                                   1068 	.area _INITIALIZER
+                                   1069 	.area _CABS (ABS)
