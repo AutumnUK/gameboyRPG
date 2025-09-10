@@ -1,44 +1,26 @@
-#include "headers.h"
-#include "title_screen.h"
-#include "save_room.h"
-#include "player.h"
-#include "../res/test_tiles.c"
-#include "maps.h"
-void clear(void) {
-    
-    for (int i = 0; i < 18; i++) {
-        for (int j = 0; j < 20; j++) {
-            set_bkg_tile_xy(j,i,0);
-        }
-
-    }
-
-
-}
+#include    "../Tools/GBDK/include/gb/gb.h"
+#include    "../Tools/GBDK/include/gb/drawing.h"
+#include    "../res/test_tiles.c"
+#include    "maps.h"
+#include    "functions.h"
 
 void main(void) {    
-    SHOW_SPRITES;
-    SHOW_BKG;
-    DISPLAY_ON;    
-    set_bkg_data(0,4,TestTiles);
+    systemSetup();
+
+    set_bkg_data(   0,4,TestTiles);
     set_sprite_data(0,4,TestTiles);
+
     set_sprite_tile(0,1);
     set_sprite_tile(1,1);
     set_sprite_tile(2,1);
     set_sprite_tile(3,1);
-    clear();
-    
-    int player_x;
-    int player_y;
-    player_x = 160/2;
-    player_y = 144/2;
 
-    int camera_x;
-    int camera_y;
-    int moving = 0;
-    camera_x = 10;
-    camera_y = 10;
-    vsync();
+    int player_x = 80;
+    int player_y = 72;
+    int camera_x = 10;
+    int camera_y = 10;
+    int moving   = 0;
+  
     while (1) {
         vsync();
         move_sprite(0,player_x,player_y);
@@ -51,7 +33,7 @@ void main(void) {
             // Horizontal loop.
             for (int j = camera_x; j < 20 + camera_x; j++) {
                 // Set fixed x and y with camera relative x and y;
-                set_bkg_tile_xy(j - camera_x,i - camera_y,map[i][j]);
+                set_bkg_tile_xy(j - camera_x,i - camera_y,debug_map[i][j]);
             }
         }
 

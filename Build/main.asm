@@ -9,7 +9,7 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _main
-	.globl _clear
+	.globl _systemSetup
 	.globl _set_sprite_data
 	.globl _get_bkg_tile_xy
 	.globl _set_bkg_tile_xy
@@ -50,67 +50,22 @@ _TestTiles::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;src\main.c:7: void clear(void) {
-;	---------------------------------
-; Function clear
-; ---------------------------------
-_clear::
-;src\main.c:9: for (int i = 0; i < 18; i++) {
-	ld	c, #0x00
-00107$:
-	ld	a, c
-	sub	a, #0x12
-	ret	NC
-;src\main.c:10: for (int j = 0; j < 20; j++) {
-	ld	b, #0x00
-00104$:
-	ld	a, b
-	sub	a, #0x14
-	jr	NC, 00108$
-;src\main.c:11: set_bkg_tile_xy(j,i,0);
-	ld	e, c
-	ld	d, b
-	push	bc
-	xor	a, a
-	push	af
-	inc	sp
-	ld	a, d
-	call	_set_bkg_tile_xy
-	pop	bc
-;src\main.c:10: for (int j = 0; j < 20; j++) {
-	inc	b
-	jr	00104$
-00108$:
-;src\main.c:9: for (int i = 0; i < 18; i++) {
-	inc	c
-;src\main.c:17: }
-	jr	00107$
-;src\main.c:19: void main(void) {    
+;src\main.c:7: void main(void) {    
 ;	---------------------------------
 ; Function main
 ; ---------------------------------
 _main::
 	add	sp, #-14
-;src\main.c:20: SHOW_SPRITES;
-	ldh	a, (_LCDC_REG + 0)
-	or	a, #0x02
-	ldh	(_LCDC_REG + 0), a
-;src\main.c:21: SHOW_BKG;
-	ldh	a, (_LCDC_REG + 0)
-	or	a, #0x01
-	ldh	(_LCDC_REG + 0), a
-;src\main.c:22: DISPLAY_ON;    
-	ldh	a, (_LCDC_REG + 0)
-	or	a, #0x80
-	ldh	(_LCDC_REG + 0), a
-;src\main.c:23: set_bkg_data(0,4,TestTiles);
+;src\main.c:8: systemSetup();
+	call	_systemSetup
+;src\main.c:10: set_bkg_data(   0,4,TestTiles);
 	ld	bc, #_TestTiles+0
 	push	bc
 	ld	hl, #0x400
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;src\main.c:24: set_sprite_data(0,4,TestTiles);
+;src\main.c:11: set_sprite_data(0,4,TestTiles);
 	push	bc
 	ld	hl, #0x400
 	push	hl
@@ -125,21 +80,17 @@ _main::
 	ld	(hl), #0x01
 	ld	hl, #(_shadow_OAM + 14)
 	ld	(hl), #0x01
-;src\main.c:29: clear();
-	call	_clear
-;src\main.c:39: camera_x = 10;
+;src\main.c:20: int camera_x = 10;
 	ldhl	sp,	#8
 	ld	a, #0x0a
 	ld	(hl+), a
 	xor	a, a
 	ld	(hl), a
-;src\main.c:40: camera_y = 10;
+;src\main.c:21: int camera_y = 10;
 	ld	bc, #0x000a
-;src\main.c:41: vsync();
-	call	_vsync
-;src\main.c:42: while (1) {
+;src\main.c:24: while (1) {
 00122$:
-;src\main.c:43: vsync();
+;src\main.c:25: vsync();
 	call	_vsync
 ;src\../Tools/GBDK/include/gb/gb.h:1961: OAM_item_t * itm = &shadow_OAM[nb];
 	ld	hl, #_shadow_OAM
@@ -165,7 +116,7 @@ _main::
 	ld	a, #0x50
 	ld	(hl+), a
 	ld	(hl), #0x58
-;src\main.c:50: for (int i = camera_y; i < 18 + camera_y; i++) {
+;src\main.c:32: for (int i = camera_y; i < 18 + camera_y; i++) {
 	ldhl	sp,#8
 	ld	a, (hl+)
 	ld	e, a
@@ -214,7 +165,7 @@ _main::
 	scf
 00236$:
 	jp	NC, 00102$
-;src\main.c:52: for (int j = camera_x; j < 20 + camera_x; j++) {
+;src\main.c:34: for (int j = camera_x; j < 20 + camera_x; j++) {
 	ldhl	sp,#10
 	ld	a, (hl+)
 	ld	e, a
@@ -240,7 +191,7 @@ _main::
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
-	ld	hl, #_map
+	ld	hl, #_debug_map
 	add	hl, de
 	push	hl
 	ld	a, l
@@ -283,7 +234,7 @@ _main::
 	scf
 00238$:
 	jr	NC, 00137$
-;src\main.c:54: set_bkg_tile_xy(j - camera_x,i - camera_y,map[i][j]);
+;src\main.c:36: set_bkg_tile_xy(j - camera_x,i - camera_y,debug_map[i][j]);
 	ldhl	sp,#4
 	ld	a, (hl+)
 	ld	e, a
@@ -317,7 +268,7 @@ _main::
 	ld	a, (hl)
 	call	_set_bkg_tile_xy
 	pop	bc
-;src\main.c:52: for (int j = camera_x; j < 20 + camera_x; j++) {
+;src\main.c:34: for (int j = camera_x; j < 20 + camera_x; j++) {
 	ldhl	sp,	#12
 	inc	(hl)
 	jr	NZ, 00133$
@@ -325,7 +276,7 @@ _main::
 	inc	(hl)
 	jr	00133$
 00137$:
-;src\main.c:50: for (int i = camera_y; i < 18 + camera_y; i++) {
+;src\main.c:32: for (int i = camera_y; i < 18 + camera_y; i++) {
 	ldhl	sp,	#10
 	inc	(hl)
 	jp	NZ,00136$
@@ -333,11 +284,11 @@ _main::
 	inc	(hl)
 	jp	00136$
 00102$:
-;src\main.c:59: if (joypad() & J_LEFT)  { 
+;src\main.c:41: if (joypad() & J_LEFT)  { 
 	call	_joypad
 	bit	1, a
 	jr	Z, 00106$
-;src\main.c:60: if ( get_bkg_tile_xy( 8,8 ) != 0x01) {
+;src\main.c:42: if ( get_bkg_tile_xy( 8,8 ) != 0x01) {
 	ld	a, #0x08
 	push	af
 	inc	sp
@@ -348,7 +299,7 @@ _main::
 	pop	hl
 	dec	e
 	jr	Z, 00106$
-;src\main.c:61: moving = 1; camera_x -=1; moving = 0; 
+;src\main.c:43: moving = 1; camera_x -=1; moving = 0; 
 	ldhl	sp,#8
 	ld	e, (hl)
 	inc	hl
@@ -359,11 +310,11 @@ _main::
 	inc	hl
 	ld	(hl), d
 00106$:
-;src\main.c:65: if (joypad() & J_RIGHT) { 
+;src\main.c:47: if (joypad() & J_RIGHT) { 
 	call	_joypad
 	rrca
 	jr	NC, 00110$
-;src\main.c:66: if ( get_bkg_tile_xy( 11,8 ) != 0x01) {
+;src\main.c:48: if ( get_bkg_tile_xy( 11,8 ) != 0x01) {
 	ld	a, #0x08
 	push	af
 	inc	sp
@@ -374,7 +325,7 @@ _main::
 	pop	hl
 	dec	e
 	jr	Z, 00110$
-;src\main.c:67: moving = 1; camera_x +=1; moving = 0; 
+;src\main.c:49: moving = 1; camera_x +=1; moving = 0; 
 	ldhl	sp,	#8
 	inc	(hl)
 	jr	NZ, 00245$
@@ -382,11 +333,11 @@ _main::
 	inc	(hl)
 00245$:
 00110$:
-;src\main.c:71: if (joypad() & J_UP)    { 
+;src\main.c:53: if (joypad() & J_UP)    { 
 	call	_joypad
 	bit	2, a
 	jr	Z, 00114$
-;src\main.c:72: if ( get_bkg_tile_xy( 9,6) != 0x01) {
+;src\main.c:54: if ( get_bkg_tile_xy( 9,6) != 0x01) {
 	ld	a, #0x06
 	push	af
 	inc	sp
@@ -397,24 +348,24 @@ _main::
 	pop	hl
 	dec	e
 	jr	Z, 00114$
-;src\main.c:73: moving = 1; camera_y -=1; moving = 0; 
+;src\main.c:55: moving = 1; camera_y -=1; moving = 0; 
 	dec	bc
 00114$:
-;src\main.c:77: if (joypad() & J_DOWN)  { 
+;src\main.c:59: if (joypad() & J_DOWN)  { 
 	call	_joypad
 	bit	3, a
 	jp	Z,00122$
-;src\main.c:78: if ( get_bkg_tile_xy( 9, 9) != 0x01) {
+;src\main.c:60: if ( get_bkg_tile_xy( 9, 9) != 0x01) {
 	ld	hl, #0x909
 	push	hl
 	call	_get_bkg_tile_xy
 	pop	hl
 	dec	e
 	jp	Z,00122$
-;src\main.c:79: moving = 1; camera_y += 1; moving = 0; 
+;src\main.c:61: moving = 1; camera_y += 1; moving = 0; 
 	inc	bc
 	jp	00122$
-;src\main.c:86: }
+;src\main.c:68: }
 	add	sp, #14
 	ret
 	.area _CODE
